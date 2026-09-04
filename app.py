@@ -19,6 +19,10 @@ def concepts():
 def example():
     return render_template("use_case1.html")
 
+@app.route("/use-case-2/")
+def use_case_2():
+    return render_template("use_case2.html")
+
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
