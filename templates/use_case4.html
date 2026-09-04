@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Use Case 4 - Regression{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Use Case 4</h1>
+    <p class="lead text-muted">Real Estate Price Prediction</p>
+</div>
+
+<div class="row g-4">
+    <!-- Use Case Name -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Use Case Name</div>
+            <div class="card-body">
+                <h5 class="card-title">House Price Prediction</h5>
+                <p class="card-text">A regression model that estimates the selling price of a house based on its characteristics.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Context -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Problem Context</div>
+            <div class="card-body">
+                <p class="card-text">Real estate agents and buyers need accurate price estimates to make informed decisions. Manual appraisal is slow and subjective.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data That Could Be Used -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Data That Could Be Used</div>
+            <div class="card-body">
+                <ul>
+                    <li>House size (square meters).</li>
+                    <li>Number of rooms and bathrooms.</li>
+                    <li>Location and neighborhood characteristics.</li>
+                    <li>Year of construction and renovations.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">What Should the Model Predict?</div>
+            <div class="card-body">
+                <p class="card-text">The model should predict the expected market price of a property.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Type of ML -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Type of Machine Learning</div>
+            <div class="card-body">
+                <span class="badge bg-primary fs-6">Supervised Learning — Regression</span>
+                <p class="card-text mt-3">Trained with historical data of house sales and their features.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefit -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Potential Benefit</div>
+            <div class="card-body">
+                <p class="card-text">Provides accurate price estimates, helps buyers avoid overpaying, and assists sellers in setting competitive prices.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
