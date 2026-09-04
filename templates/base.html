@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,6 @@
     <title>{% block title %}Data with Roots - Machine Learning{% endblock %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body {
@@ -33,15 +32,15 @@
     </style>
 </head>
 <body>
-
-    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ url_for('home') }}">
                 <i class="bi bi-cpu-fill me-2 text-primary"></i>Data with Roots
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -57,16 +56,20 @@
                         <a class="nav-link" href="{{ url_for('concepts') }}">Concepts</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
                             Use Cases
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
                             <li><a class="dropdown-item" href="{{ url_for('example') }}">Use Case 1 (Regression)</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('use_case_2') }}">Use Case 2 (Classification)</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('use_case3') }}">Use Case 3 (Sentiment Analysis)</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('use_case4') }}">Use Case 4 (House Price Prediction)</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
                             Interactive Demo
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
@@ -77,7 +80,6 @@
             </div>
         </div>
     </nav>
-
 
     <main class="container my-5">
         {% block content %}{% endblock %}
