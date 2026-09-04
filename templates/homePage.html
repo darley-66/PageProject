@@ -1,16 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;"><h1>Instructions</h1>
-    <p><br>This project covers the basics of Machine Learning, exploring its definition, its different 
-        types, and diving into supervised learning through practical use cases. The web application 
-        was developed using Python with Flask for the server logic, and HTML along with Bootstrap for 
-        the interface design.</p></div>
-    
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home - Data with Roots{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-sm p-4 p-md-5 bg-white rounded-3">
+            <div class="card-body">
+                <span class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 rounded-pill fw-semibold">Overview</span>
+                <h1 class="display-5 fw-bold text-dark mb-4">Instructions</h1>
+                <p class="lead text-secondary lh-lg">
+                    This project covers the basics of Machine Learning, exploring its definition, its different 
+                    types, and diving into supervised learning through practical use cases. The web application 
+                    was developed using Python with Flask for the server logic, and HTML along with Bootstrap for 
+                    the interface design.
+                </p>
+                <hr class="my-4">
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('information') }}" class="btn btn-primary btn-lg px-4">Get Started</a>
+                    <a href="{{ url_for('calculate') }}" class="btn btn-outline-secondary btn-lg px-4">Try Predictor</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

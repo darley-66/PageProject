@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from LinearRegression import CalculateGrade
-import requests
 
 app = Flask(__name__)
 
@@ -18,13 +17,18 @@ def concepts():
 
 @app.route("/example/")
 def example():
-    return render_template("example.html")
+    return render_template("use_case1.html")
 
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
-    hours = requests
-    calculateResult = CalculateGrade(5)
+    if request.method == "POST":
+        try:
+            hours = float(request.form.get("hours"))
+            calculateResult = CalculateGrade(hours)
+        except (ValueError, TypeError):
+            calculateResult = None
+            
     return render_template("temLinearRegression.html", result=calculateResult)
 
 if __name__ == "__main__":
