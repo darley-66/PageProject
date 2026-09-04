@@ -23,6 +23,14 @@ def example():
 def use_case_2():
     return render_template("use_case2.html")
 
+@app.route("/use-case-3/")
+def use_case3():
+    return render_template("use_case3.html")
+
+@app.route("/use-case-4/")
+def use_case4():
+    return render_template("use_case4.html")
+
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
