@@ -15,6 +15,10 @@ def information():
 def concepts():
     return render_template("concepts.html")
 
+@app.route("/conceptsLinear/")
+def concepts_linear():
+    return render_template("conceptsLinear.html")
+
 @app.route("/example/")
 def example():
     return render_template("use_case1.html")

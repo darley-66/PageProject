@@ -1,4 +1,4 @@
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,8 +52,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('information') }}">What is ML?</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('concepts') }}">Concepts</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Linear Regression
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{{ url_for('concepts_linear') }}">Concepts</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('calculate') }}">Application (Calculator)</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" 
@@ -65,15 +72,6 @@
                             <li><a class="dropdown-item" href="{{ url_for('use_case_2') }}">Use Case 2 (Classification)</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('use_case3') }}">Use Case 3 (Sentiment Analysis)</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('use_case4') }}">Use Case 4 (House Price Prediction)</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Interactive Demo
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="{{ url_for('calculate') }}">Linear Regression Calculator</a></li>
                         </ul>
                     </li>
                 </ul>
