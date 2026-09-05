@@ -4,7 +4,6 @@ import io
 import base64
 from sklearn.linear_model import LinearRegression
 
-# Datos simples para la prueba
 data = {
     "Study Hours": [1, 2, 3, 4, 5, 6, 7, 8],
     "Final Grade": [2.0, 2.5, 3.0, 3.5, 3.7, 4.0, 4.2, 4.5]
@@ -21,7 +20,6 @@ model.fit(x, y)
 def CalculateGrade(hours):
     return model.predict(pd.DataFrame([[hours]], columns=["Study Hours"]))[0]
 
-
 def GeneratePlot():
     plt.figure(figsize=(6,4))
     plt.scatter(x, y, color="blue", label="Datos reales")
@@ -30,11 +28,10 @@ def GeneratePlot():
     plt.ylabel("Final Grade")
     plt.title("Linear Regression Example")
     plt.legend()
-    print("Longitud del string base64:", len(plot_url))
-
     img = io.BytesIO()
     plt.savefig(img, format="png")
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode("utf8")
     plt.close()
+    print("Longitud del string base64:", len(plot_url))
     return plot_url
