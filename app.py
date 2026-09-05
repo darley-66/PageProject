@@ -19,7 +19,6 @@ def information():
 def concepts():
     return render_template("concepts.html")
 
-HEAD
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
@@ -65,4 +64,4 @@ def calculate():
 
 if __name__ == "__main__":
     app.run(debug=True)
-R1A1
+
