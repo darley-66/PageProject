@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from LinearRegression import CalculateGrade
+from LinearRegression import CalculateGrade, GeneratePlot
 
 app = Flask(__name__)
 
@@ -38,6 +38,7 @@ def use_case4():
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
+    plot_url = GeneratePlot()  
     if request.method == "POST":
         try:
             hours = float(request.form.get("hours"))
@@ -45,7 +46,7 @@ def calculate():
         except (ValueError, TypeError):
             calculateResult = None
             
-    return render_template("temLinearRegression.html", result=calculateResult)
+    return render_template("temLinearRegression.html", result=calculateResult, plot_url=plot_url)
 
 if __name__ == "__main__":
     app.run(debug=True)
