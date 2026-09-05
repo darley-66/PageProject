@@ -5,11 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-
-    return "Hello World"
-
     return render_template("homePage.html")
-
 
 @app.route("/information/")
 def information():
@@ -18,16 +14,6 @@ def information():
 @app.route("/concepts/")
 def concepts():
     return render_template("concepts.html")
-
-@app.route("/LinearRegression/", methods=["GET", "POST"])
-def calculate():
-    calculateResult = None
-    hours = requests
-    calculateResult = LinearRegression.calculateGrade(5)
-    return render_template("temLinearRegression.html", result=calculateResult)
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 @app.route("/conceptsLinear/")
 def concepts_linear():
@@ -52,7 +38,7 @@ def use_case4():
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     calculateResult = None
-    plot_url = GeneratePlot()  
+    plot_url = GeneratePlot()   # Genera la gráfica siempre
     if request.method == "POST":
         try:
             hours = float(request.form.get("hours"))
@@ -64,4 +50,3 @@ def calculate():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
