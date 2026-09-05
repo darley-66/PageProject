@@ -1,72 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=>, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+{% extends "base.html" %}
 
-    <h1 style="text-align: center;">¿What is Machine Learning?</h1>
-    
-    <p>learning is the subset or branch of artificial intelligence focused on algorithms 
-        capable of learning patterns in training data, and then making inferences on new data. 
-        This allows for pattern recognition that machine learning models use to make predictions 
-        without the need for explicit, coded instructions.<br><br>He has come to master the field 
-        of artificial intelligence, being the backbone from forecasting models that use historical 
-        data and statistical models to project future business results and financial performance, to 
-        autonomous vehicles, large language models, and more generative AI tools.</p>
+{% block title %}What is Machine Learning? - Data with Roots{% endblock %}
 
-    <h2 style="text-align: center;">Main types of Machine Learning</h2>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        
+        <div class="card shadow-sm mb-5">
+            <div class="card-body p-4">
+                <h1 class="text-center fw-bold mb-4">¿What is Machine Learning?</h1>
+                <p class="lead text-secondary">
+                    learning is the subset or branch of artificial intelligence focused on algorithms 
+                    capable of learning patterns in training data, and then making inferences on new data. 
+                    This allows for pattern recognition that machine learning models use to make predictions 
+                    without the need for explicit, coded instructions.<br><br>
+                    He has come to master the field of artificial intelligence, being the backbone from forecasting 
+                    models that use historical data and statistical models to project future business results and 
+                    financial performance, to autonomous vehicles, large language models, and more generative AI tools.
+                </p>
+            </div>
+        </div>
 
-    
-        <dl>
-            <li><strong>Supervised learning:</strong> the model is trained on a set of labeled data (target 
-            variables or already known outcomes). Supervised learning is commonly used for risk assessment, 
-            image recognition, predictive analysis, and fraud detection 
-            <br><br>
-            <dd><li><strong>Regression:</strong> Predicts continuous 
-            or numerical values (e.g., temperature, salary). Includes linear regression, random forest, and 
-            gradient boosting.</li>
-            <li><strong>Classification:</strong> Assigns data to categories or labels (e.g., "spam" or "not spam"). Includes 
-            logistic regression, k-NN, and SVM.</li>
-            <li><strong>Naïve Bayes classifiers:</strong> Ideal for large volumes of data and generative models. In this area, 
-            decision trees are also mentioned, which can be adapted for regression and classification.</li>
-            <li><strong>Neural networks:</strong> Simulate the human brain through interconnected nodes; used in translation, 
-            voice, and image processing.</li>
-            <li><strong>Random Forest:</strong> Combines the results of multiple decision trees to predict a value or category.</li>
-            </dd>
-        </dl>
-</li>
-    
-    <dl><li><strong>Unsupervised learning:</strong> Methods extract inferences from unlabeled datasets, 
-        making exploratory data analysis easier and allowing for pattern recognition and predictive modeling. 
-        The most common unsupervised learning method is cluster analysis, which uses clustering algorithms to 
-        categorize data points based on value similarity (like in customer segmentation or anomaly detection).
-    </li>
-    <br>
-    <dd>
-        <li><strong>K-means Clustering:</strong> Groups data based on how close they are to a centroid into <em>K</em> categories. 
-            It's used in market segmentation, document grouping, image segmentation, and compression. </li>
-        <li><strong>Hierarchical Clustering:</strong> Includes two approaches; agglomerative (starts with isolated points 
-            and merges them based on similarity) and divisive (starts with a single group and splits it 
-            based on differences).</li> 
-        <li><strong>Probabilistic Clustering:</strong> Does a "soft" clustering by assigning data according to the probability 
-            of belonging to a specific distribution. It solves density estimation problems.</li>
-    </dd>
+        <h2 class="text-center fw-bold mb-4">Main types of Machine Learning</h2>
 
-    </dl>
-    
-    <li><strong>Reinforcement learning:</strong> It's a type of dynamic programming that delivers algorithms 
-        through a reward and punishment model. To implement reinforcement learning, an agent takes actions in 
-        a specific environment to reach a predetermined goal. The agent is rewarded or penalized for its 
-        actions based on a set metric (usually points), encouraging the agent to keep up good practices and 
-        drop the bad ones. With repetition, the agent learns the best strategies.</li>
+        <div class="accordion shadow-sm" id="mlTypesAccordion">
+            
+            <!-- Supervised Learning -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#supervised">
+                        Supervised learning
+                    </button>
+                </h2>
+                <div id="supervised" class="accordion-collapse collapse show" data-bs-parent="#mlTypesAccordion">
+                    <div class="accordion-body">
+                        <p>the model is trained on a set of labeled data (target variables or already known outcomes). Supervised learning is commonly used for risk assessment, image recognition, predictive analysis, and fraud detection.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Regression:</strong> Predicts continuous or numerical values (e.g., temperature, salary). Includes linear regression, random forest, and gradient boosting.</li>
+                            <li class="list-group-item"><strong>Classification:</strong> Assigns data to categories or labels (e.g., "spam" or "not spam"). Includes logistic regression, k-NN, and SVM.</li>
+                            <li class="list-group-item"><strong>Naïve Bayes classifiers:</strong> Ideal for large volumes of data and generative models. In this area, decision trees are also mentioned, which can be adapted for regression and classification.</li>
+                            <li class="list-group-item"><strong>Neural networks:</strong> Simulate the human brain through interconnected nodes; used in translation, voice, and image processing.</li>
+                            <li class="list-group-item"><strong>Random Forest:</strong> Combines the results of multiple decision trees to predict a value or category.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Unsupervised Learning -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#unsupervised">
+                        Unsupervised learning
+                    </button>
+                </h2>
+                <div id="unsupervised" class="accordion-collapse collapse" data-bs-parent="#mlTypesAccordion">
+                    <div class="accordion-body">
+                        <p>Methods extract inferences from unlabeled datasets, making exploratory data analysis easier and allowing for pattern recognition and predictive modeling. The most common unsupervised learning method is cluster analysis, which uses clustering algorithms to categorize data points based on value similarity (like in customer segmentation or anomaly detection).</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>K-means Clustering:</strong> Groups data based on how close they are to a centroid into <em>K</em> categories. It's used in market segmentation, document grouping, image segmentation, and compression.</li>
+                            <li class="list-group-item"><strong>Hierarchical Clustering:</strong> Includes two approaches; agglomerative (starts with isolated points and merges them based on similarity) and divisive (starts with a single group and splits it based on differences).</li>
+                            <li class="list-group-item"><strong>Probabilistic Clustering:</strong> Does a "soft" clustering by assigning data according to the probability of belonging to a specific distribution. It solves density estimation problems.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reinforcement Learning -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#reinforcement">
+                        Reinforcement learning
+                    </button>
+                </h2>
+                <div id="reinforcement" class="accordion-collapse collapse" data-bs-parent="#mlTypesAccordion">
+                    <div class="accordion-body">
+                        It's a type of dynamic programming that delivers algorithms through a reward and punishment model. To implement reinforcement learning, an agent takes actions in a specific environment to reach a predetermined goal. The agent is rewarded or penalized for its actions based on a set metric (usually points), encouraging the agent to keep up good practices and drop the bad ones. With repetition, the agent learns the best strategies.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
-    
-
-
-</body>
-</html>
+{% endblock %}

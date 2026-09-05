@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Use Case 2 - Classification - Data with Roots{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Use Case 2</h1>
+    <p class="lead text-muted">Email Spam & Phishing Detection</p>
+</div>
+
+<div class="row g-4">
+
+    <!-- Use Case Name -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Use Case Name
+            </div>
+            <div class="card-body">
+                <h5 class="card-title fw-bold text-primary">
+                    Automated Email Spam and Phishing Detection
+                </h5>
+                <p class="card-text text-secondary">
+                    An intelligent system designed to filter incoming emails and categorize them as legitimate messages or potential malicious threats.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Context -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Problem Context
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Organizations and individual users receive hundreds of junk emails or scam attempts (phishing) every day. Manually reviewing every single message is impractical and exposes users to cyberattacks, credential theft, and malware infections.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data That Could Be Used -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Data That Could Be Used
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded-3 h-100">
+                            <h6 class="fw-bold">Subject & Body Text</h6>
+                            <p class="small text-muted mb-0">Suspicious keywords and phrases (e.g., "urgent", "prize winner", "account suspended").</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded-3 h-100">
+                            <h6 class="fw-bold">Sender Metadata</h6>
+                            <p class="small text-muted mb-0">Sender email address, domain origin, server IP, and SPF/DKIM validation flags.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded-3 h-100">
+                            <h6 class="fw-bold">Links & Attachments</h6>
+                            <p class="small text-muted mb-0">Number of external hyperlinks, shortened URLs, or suspicious executable attachments.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded-3 h-100">
+                            <h6 class="fw-bold">Formatting Patterns</h6>
+                            <p class="small text-muted mb-0">Excessive capitalization, exclamation marks, or hidden HTML tags.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- What the Model Should Predict/Classify -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                What the Model Should Classify
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    The model must assign each email to a discrete category: 
+                    <span class="badge bg-success">Ham (Legitimate)</span> or 
+                    <span class="badge bg-danger">Spam / Phishing</span>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Type of Machine Learning -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Type of Machine Learning
+            </div>
+            <div class="card-body">
+                <span class="badge bg-primary fs-6 mb-2">Supervised Learning — Binary Classification</span>
+                <p class="card-text text-muted">
+                    The system is trained using a labeled dataset containing thousands of emails pre-classified as "Spam" or "Not Spam" (e.g., Naïve Bayes, Logistic Regression, or SVM).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Potential Benefit -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Potential Benefit
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Significantly enhances information security by mitigating cyber risks, reduces time wasted on reviewing junk mail, and keeps users' inboxes organized.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

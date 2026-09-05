@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -253,3 +254,86 @@
 </body>
 
 </html>
+=======
+{% extends "base.html" %}
+
+{% block title %}Use Case 1 - Data with Roots{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Use Case 1</h1>
+    <p class="lead text-muted">Student Academic Performance Prediction</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Name of Use Case</div>
+            <div class="card-body">
+                <h5 class="card-title">Student Academic Performance Prediction</h5>
+                <p class="card-text">A Machine Learning system designed to predict students' future academic performance.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Problem Context</div>
+            <div class="card-body">
+                <p class="card-text">Educational institutions have information such as students' grades, attendance and study time. This information can be used to estimate future academic performance and identify students who may need additional support.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Data That Could Be Used</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <h5>Grades</h5>
+                        <p>Previous grades obtained by the student.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Attendance</h5>
+                        <p>Percentage of classes attended by the student.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Study Hours</h5>
+                        <p>Approximate number of hours dedicated to studying.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">What Should the Model Predict?</div>
+            <div class="card-body">
+                <p class="card-text">The model should predict the student's expected final academic grade based on the available data.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Type of Machine Learning</div>
+            <div class="card-body">
+                <span class="badge bg-primary fs-6">Supervised Learning</span>
+                <p class="card-text mt-3">Historical data with known academic results can be used to train the model.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Potential Benefit</div>
+            <div class="card-body">
+                <p class="card-text">The system could help educational institutions identify students at risk of low academic performance and provide early academic support.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> R1A1

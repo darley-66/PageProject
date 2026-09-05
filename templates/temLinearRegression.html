@@ -1,19 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Linear regression: Calculate grades depends on study housr </h1>
-    <form method="post">
-        <label for "hours">Study Hours: </label>
-        <imput type="number" name="hours" required>
-        <button type=" sumit">Predict</button>
-    </form>
-    {% if result is not none %}
-        <h2>Estimated Grade : {{result}}</h2>
-    {% endif %}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Linear Regression Calculator - Data with Roots{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white p-3">
+                <h4 class="card-title mb-0">Grade Predictor</h4>
+            </div>
+            <div class="card-body p-4">
+                <h5 class="card-subtitle mb-3 text-muted">
+                    Linear regression: Calculate grades depends on study hours
+                </h5>
+                
+                <form method="post" action="{{ url_for('calculate') }}">
+                    <div class="mb-3">
+                        <label for="hours" class="form-label fw-bold">Study Hours:</label>
+                        <input type="number" step="any" min="0" class="form-control form-control-lg" 
+                               id="hours" name="hours" placeholder="e.g. 5" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg">Predict Grade</button>
+                </form>
+
+                {% if result is not none %}
+                    <div class="alert alert-success mt-4 mb-0 d-flex align-items-center" role="alert">
+                        <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading mb-0">
+                                Estimated Grade: <strong>{{ "%.2f"|format(result) }}</strong>
+                            </h5>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if plot_url %}
+                    <div class="mt-4 text-center">
+                        <img src="data:image/png;base64,{{ plot_url }}" 
+                             class="img-fluid rounded shadow" alt="Regression Plot">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
