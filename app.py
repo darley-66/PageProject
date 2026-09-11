@@ -1,5 +1,10 @@
 from flask import Flask, render_template, request
+<<<<<<< Updated upstream
 from LinearRegression import CalculateGrade
+=======
+from LinearRegression import CalculateGrade, GeneratePlot
+from LogisticRegression import PredictSpam, GeneratePlot
+>>>>>>> Stashed changes
 
 app = Flask(__name__)
 
@@ -46,6 +51,24 @@ def calculate():
             calculateResult = None
             
     return render_template("temLinearRegression.html", result=calculateResult)
+
+@app.route("/SVM/", methods=["GET", "POST"])
+def calculate_svm():
+    calculateResult = None
+    plot_url = GeneratePlot()
+    email_text = ""
+
+    if request.method == "POST":
+        email_text = request.form.get("email_text", "")
+        if email_text.strip():
+            calculateResult = PredictSpam(email_text)
+
+    return render_template(
+        "temLogisticRegression.html", 
+        result=calculateResult, 
+        plot_url=plot_url, 
+        email_text=email_text
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

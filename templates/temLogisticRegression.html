@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam CLasification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result-card {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .spam {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .ham {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Mail classification</h1>
+        <p><strong>Model:</strong> Logistic Regression / SVM (0 = Non-Spam, 1 = Spam)</p>
+
+        <form action="/SVM/" method="POST">
+            <label for="email_text"><strong>Write or paste the email text:</strong></label><br><br>
+            
+            <textarea id="email_text" name="email_text" placeholder="Example: WINNER! Claim your $1000 prize now..." required>{{ email_text }}</textarea>
+            <br>
+            <button type="submit">Analyze email</button>
+        </form>
+
+        {% if result is not none %}
+            <div class="result-card {% if result == 1 %}spam{% else %}ham{% endif %}">
+                <h3>Prediction results:</h3>
+                {% if result == 1 %}
+                    <p><strong>Clasification:</strong> 1 - SPAM DETECTED</p>
+                {% else %}
+                    <p><strong>Clasification:</strong> 0 - LEGITIMATE EMAIL (NOT SPAM)</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if plot_url %}
+            <h3 style="margin-top: 25px;">Dataset distribution:</h3>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de clases" style="width: 100%; max-width: 500px;">
+        {% endif %}
+    </div>
+
+</body>
+</html>

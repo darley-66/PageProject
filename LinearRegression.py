@@ -20,5 +20,27 @@ model =LinearRegression()
 model.fit(x,y)
 
 def CalculateGrade(hours):
+<<<<<<< Updated upstream
     result = model.predict([[hours]])[0]
     return result
+=======
+    return model.predict(pd.DataFrame([[hours]], columns=["Study Hours"]))[0]
+
+
+def GeneratePlot():
+    plt.figure(figsize=(6,4))
+    plt.scatter(x, y, color="blue", label="Datos reales")
+    plt.plot(x, model.predict(x), color="red", label="Regresión lineal")
+    plt.xlabel("Study Hours")
+    plt.ylabel("Final Grade")
+    plt.title("Linear Regression Example")
+    plt.legend()
+
+    img = io.BytesIO()
+    plt.savefig(img, format="png")
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode("utf8")
+    print("Longitud del string base64:", len(plot_url))
+    plt.close()
+    return plot_url
+>>>>>>> Stashed changes
