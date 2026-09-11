@@ -20,10 +20,6 @@ model =LinearRegression()
 model.fit(x,y)
 
 def CalculateGrade(hours):
-<<<<<<< Updated upstream
-    result = model.predict([[hours]])[0]
-    return result
-=======
     return model.predict(pd.DataFrame([[hours]], columns=["Study Hours"]))[0]
 
 
@@ -43,4 +39,3 @@ def GeneratePlot():
     print("Longitud del string base64:", len(plot_url))
     plt.close()
     return plot_url
->>>>>>> Stashed changes

@@ -6,35 +6,28 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 
-# 1. Cargar datos desde el CSV local
 df = pd.read_csv('spam.csv', encoding='latin-1')
 df = df[['v1', 'v2']]
 df.columns = ['label', 'text']
 
-# Mapeo a variable binaria (0 = Not Spam, 1 = Spam)
 df['binary_label'] = df['label'].map({'ham': 0, 'spam': 1})
 
-# 2. Definir variables y vectorizar
 X = df['text']
 y = df['binary_label']
 
 vectorizer = TfidfVectorizer(stop_words='english')
 X_vec = vectorizer.fit_transform(X)
 
-# 3. Entrenar el modelo SVM
 model = SVC(kernel='linear')
 model.fit(X_vec, y)
 
-# 4. Función de predicción (recibe el texto y retorna 0 o 1)
 def PredictSpam(email_text):
     text_vec = vectorizer.transform([email_text])
     return model.predict(text_vec)[0]
 
-# 5. Función de generación de gráfica en Base64 (frecuencia de los datos)
 def GeneratePlot():
     plt.figure(figsize=(6, 4))
     
-    # Conteo de distribución de clases
     counts = df['binary_label'].value_counts()
     categories = ['Not Spam (0)', 'Spam (1)']
     values = [counts.get(0, 0), counts.get(1, 0)]
@@ -44,7 +37,6 @@ def GeneratePlot():
     plt.ylabel("number of messages")
     plt.title("Spam vs non-spam distributio (SVC)")
     
-    # Exportar a string Base64
     img = io.BytesIO()
     plt.savefig(img, format="png", bbox_inches='tight')
     img.seek(0)
@@ -53,11 +45,8 @@ def GeneratePlot():
     plt.close()
     return plot_url
 
-# --- Pruebas rápidas de ejecución ---
 if __name__ == "__main__":
-    # Prueba de la función de predicción
     sample_text = "WINNER!! You have won a $1000 gift card! Call now to claim."
     print("Predicción para el correo:", PredictSpam(sample_text))
     
-    # Prueba de generación de imagen
     grafica_base64 = GeneratePlot()

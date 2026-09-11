@@ -1,10 +1,6 @@
 from flask import Flask, render_template, request
-<<<<<<< Updated upstream
-from LinearRegression import CalculateGrade
-=======
 from LinearRegression import CalculateGrade, GeneratePlot
 from LogisticRegression import PredictSpam, GeneratePlot
->>>>>>> Stashed changes
 
 app = Flask(__name__)
 
