@@ -1,130 +1,113 @@
-{% extends "base.html" %} {% block title %}Spam Classification{% endblock %} {%
-block content %}
+{% extends "base.html" %} 
+{% block title %}Credit Risk Evaluation - Data with Roots{% endblock %} 
 
-<style>
-  .spam-container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
-    margin: 0 auto;
-  }
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white p-3">
+        <h4 class="card-title mb-0">Credit Risk Evaluation</h4>
+      </div>
+      <div class="card-body p-4">
+        <h5 class="card-subtitle mb-3 text-muted">
+          Logistic Regression: Default Risk Classification
+        </h5>
 
-  .spam-container h1 {
-    color: #333;
-    margin-top: 0;
-  }
+        <form method="post" action="{{ url_for('calculate_logistic') }}">
+          <div class="mb-3">
+            <label for="duration_months" class="form-label fw-bold">Duration (months):</label>
+            <input
+              type="number"
+              min="1"
+              class="form-control form-control-lg"
+              id="duration_months"
+              name="duration_months"
+              value="{{ duration if duration else 24 }}"
+              required
+            />
+          </div>
 
-  .spam-container textarea {
-    width: 100%;
-    height: 120px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    resize: vertical;
-    font-size: 14px;
-  }
+          <div class="mb-3">
+            <label for="credit_amount" class="form-label fw-bold">Credit Amount ($):</label>
+            <input
+              type="number"
+              step="any"
+              min="1"
+              class="form-control form-control-lg"
+              id="credit_amount"
+              name="credit_amount"
+              value="{{ amount if amount else 3000 }}"
+              required
+            />
+          </div>
 
-  .spam-container button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
+          <div class="mb-3">
+            <label for="age" class="form-label fw-bold">Applicant Age:</label>
+            <input
+              type="number"
+              min="18"
+              max="100"
+              class="form-control form-control-lg"
+              id="age"
+              name="age"
+              value="{{ age if age else 30 }}"
+              required
+            />
+          </div>
 
-  .spam-container button:hover {
-    background-color: #0056b3;
-  }
+          <button type="submit" class="btn btn-primary w-100 btn-lg">
+            Evaluate Risk
+          </button>
+        </form>
 
-  .result-card {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 6px;
-  }
+        {% if result is not none and result %}
+        <div
+          class="alert {% if result.approved %}alert-success{% else %}alert-danger{% endif %} mt-4 mb-0 d-flex align-items-center"
+          role="alert"
+        >
+          <i class="bi {% if result.approved %}bi-check-circle-fill{% else %}bi-exclamation-triangle-fill{% endif %} fs-4 me-3"></i>
+          <div>
+            <h5 class="alert-heading mb-1">
+              {% if result.approved %}
+                Result: <strong>Approved (Low Risk)</strong>
+              {% else %}
+                Result: <strong>Rejected (High Risk)</strong>
+              {% endif %}
+            </h5>
+            <p class="mb-0">
+              Default Probability: <strong>{{ "%.2f"|format(result.default_probability * 100) }}%</strong>
+            </p>
+          </div>
+        </div>
+        {% endif %}
 
-  .spam {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
+        {% if plot_url %}
+        <h3 class="mt-4">Logistic Regression Plot:</h3>
+        <img
+          src="{{ plot_url }}"
+          alt="Logistic Regression Plot"
+          class="img-fluid rounded shadow"
+        />
+        {% endif %}
 
-  .ham {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-
-  /* Estilo para centrar y dar sombra a la gráfica */
-  .plot-image {
-    display: block;
-    margin: 20px auto;
-    max-width: 500px;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-</style>
-
-<div class="spam-container">
-  <h1>Mail classification</h1>
-
-  <p>
-    <strong>Model:</strong>
-    Logistic Regression / SVM (0 = Non-Spam, 1 = Spam)
-  </p>
-
-  <form action="{{ url_for('calculate_svm') }}" method="POST">
-    <label for="email_text">
-      <strong>Write or paste the email text:</strong>
-    </label>
-    <br /><br />
-    <textarea
-      id="email_text"
-      name="email_text"
-      placeholder="Example: WINNER! Claim your $1000 prize now..."
-      required
-    >
-{{ email_text }}</textarea
-    >
-    <br />
-    <button type="submit">Analyze email</button>
-  </form>
-
-  {% if result is not none %}
-  <div class="result-card {% if result == 1 %}spam{% else %}ham{% endif %}">
-    <h3>Prediction results:</h3>
-    {% if result == 1 %}
-    <p><strong>Classification:</strong> 1 - SPAM DETECTED</p>
-    {% else %}
-    <p><strong>Classification:</strong> 0 - LEGITIMATE EMAIL (NOT SPAM)</p>
-    {% endif %}
+        {% if metrics %}
+        <div class="alert alert-info mt-4 mb-0">
+          <strong>Model Information:</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>Accuracy:</strong> {{ "%.2f"|format(metrics.accuracy * 100) }}%</li>
+            <li><strong>Intercept:</strong> {{ metrics.intercept }}</li>
+            <li><strong>Coefficients:</strong>
+              <ul>
+                <li>Duration (months): {{ metrics.coefficients.duration_months }}</li>
+                <li>Credit Amount ($): {{ metrics.coefficients.credit_amount }}</li>
+                <li>Age: {{ metrics.coefficients.age }}</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
-  {% endif %} {% if plot_url %}
-  <h3 style="margin-top: 25px">Dataset distribution:</h3>
-  <!-- CORREGIDO: ya no duplicamos el prefijo -->
-  <img
-    src="{{ plot_url }}"
-    alt="Gráfica de clases con predicción"
-    class="plot-image"
-  />
-  {% endif %} {% if records %}
-  <div class="alert alert-info mt-4">
-    <strong>Dataset Information:</strong> The dataset contains {{ records }}
-    records.
-    <ul>
-      <li><strong>Independent Variable (X):</strong> Email text</li>
-      <li><strong>Dependent Variable (Y):</strong> Spam / Not Spam</li>
-      <li><strong>Source:</strong> Kaggle - Spam Classification Dataset</li>
-    </ul>
-  </div>
-  {% endif %}
 </div>
-
 {% endblock %}

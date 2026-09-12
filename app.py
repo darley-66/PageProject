@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from LinearRegression import CalculateGrade, GeneratePlot
-from LogisticRegression import PredictSpam, GeneratePlot as GeneratePlotLogistic
+from svm import PredictSpam, GeneratePlot as GeneratePlotLogistic
+from LogisticRegression import PredictRisk, implementLogisticRegression
 import pandas as pd
 
 app = Flask(__name__)
+
+# Recursos del modelo de regresión logística para renderizado inicial
+logistic_assets = implementLogisticRegression()
 
 # Home & Information
 @app.route("/")
@@ -34,7 +38,7 @@ def calculate():
         try:
             hours = float(request.form.get("hours"))
             calculateResult = CalculateGrade(hours)
-            plot_url = GeneratePlot(hours)  # dibuja el punto
+            plot_url = GeneratePlot(hours)
         except (ValueError, TypeError):
             calculateResult = None
             plot_url = GeneratePlot()
@@ -53,8 +57,30 @@ def concepts_logistic():
 
 @app.route("/logistic-application/", methods=["GET", "POST"])
 def calculate_logistic():
-    # Aquí puedes poner lógica específica de Logistic Regression
-    return render_template("temLogisticRegression.html")
+    return render_template("temLogisticRegression.html", metrics=logistic_assets["metrics"])
+
+# Endpoint para peticiones AJAX fetch() en temLogisticRegression.html
+@app.route("/api/predict-risk", methods=["POST"])
+def api_predict_risk():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    duration = int(data.get("duration_months", 24))
+    amount = float(data.get("credit_amount", 3000))
+    age = int(data.get("age", 30))
+
+    result = PredictRisk(duration, amount, age)
+
+    return jsonify({
+        "input_data": data,
+        "prediction": {
+            "default_risk": result["default_risk"],
+            "default_probability": result["default_probability"],
+            "approved": result["approved"]
+        },
+        "model_performance": result["metrics"]
+    })
 
 # Support Vector Machine (SVM)
 @app.route("/svm-concepts/")
@@ -74,7 +100,7 @@ def calculate_svm():
         email_text = request.form.get("email_text", "")
         if email_text.strip():
             calculateResult = PredictSpam(email_text)
-            plot_url = GeneratePlotLogistic(calculateResult)  # pasa la predicción
+            plot_url = GeneratePlotLogistic(calculateResult)
         else:
             plot_url = GeneratePlotLogistic()
     else:
