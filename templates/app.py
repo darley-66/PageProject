@@ -5,7 +5,6 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Home & Information
 @app.route("/")
 def home():
     return render_template("homePage.html")
@@ -18,11 +17,40 @@ def information():
 def concepts():
     return render_template("concepts.html")
 
-# Linear Regression
 @app.route("/conceptsLinear/")
 def concepts_linear():
     return render_template("conceptsLinear.html")
 
+@app.route("/logistic-concepts/")
+def concepts_logistic():
+    return render_template("temLogisticConcepts.html")
+
+@app.route("/logistic-application/", methods=["GET", "POST"])
+def calculate_logistic():
+    # Aquí puedes poner la lógica específica de Logistic Regression si la separas de SVM
+    return render_template("temLogisticRegression.html")
+
+@app.route("/svm-concepts/")
+def concepts_svm():
+    return render_template("temSVMConcepts.html")
+
+@app.route("/example/")
+def example():
+    return render_template("use_case1.html")
+
+@app.route("/use-case-2/")
+def use_case_2():
+    return render_template("use_case2.html")
+
+@app.route("/use-case-3/")
+def use_case3():
+    return render_template("use_case3.html")
+
+@app.route("/use-case-4/")
+def use_case4():
+    return render_template("use_case4.html")
+
+# Linear Regression route
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
     data = pd.read_csv("data/Student_Performance.csv")
@@ -34,33 +62,16 @@ def calculate():
         try:
             hours = float(request.form.get("hours"))
             calculateResult = CalculateGrade(hours)
-            plot_url = GeneratePlot(hours)  # dibuja el punto
+            plot_url = GeneratePlot(hours)  # pasa el valor para dibujar el punto
         except (ValueError, TypeError):
             calculateResult = None
             plot_url = GeneratePlot()
     else:
         plot_url = GeneratePlot()
 
-    return render_template("temLinearRegression.html", 
-                           result=calculateResult, 
-                           records=records, 
-                           plot_url=plot_url)
+    return render_template("temLinearRegression.html", result=calculateResult, records=records, plot_url=plot_url)
 
-# Logistic Regression
-@app.route("/logistic-concepts/")
-def concepts_logistic():
-    return render_template("temLogisticConcepts.html")
-
-@app.route("/logistic-application/", methods=["GET", "POST"])
-def calculate_logistic():
-    # Aquí puedes poner lógica específica de Logistic Regression
-    return render_template("temLogisticRegression.html")
-
-# Support Vector Machine (SVM)
-@app.route("/svm-concepts/")
-def concepts_svm():
-    return render_template("conceptsSVM.html")
-
+# Support Vector Machine (SVM) route
 @app.route("/SVM/", methods=["GET", "POST"])
 def calculate_svm():
     data = pd.read_csv("data/spam.csv", encoding="latin-1")
@@ -80,28 +91,13 @@ def calculate_svm():
     else:
         plot_url = GeneratePlotLogistic()
 
-    return render_template("temSVMApp.html", 
-                           result=calculateResult, 
-                           plot_url=plot_url, 
-                           email_text=email_text,
-                           records=records)
-
-# Use Cases
-@app.route("/example/")
-def example():
-    return render_template("use_case1.html")
-
-@app.route("/use-case-2/")
-def use_case_2():
-    return render_template("use_case2.html")
-
-@app.route("/use-case-3/")
-def use_case3():
-    return render_template("use_case3.html")
-
-@app.route("/use-case-4/")
-def use_case4():
-    return render_template("use_case4.html")
+    return render_template(
+        "temSVMApp.html",   # usa un template específico para SVM
+        result=calculateResult, 
+        plot_url=plot_url, 
+        email_text=email_text,
+        records=records
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

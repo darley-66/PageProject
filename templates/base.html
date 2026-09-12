@@ -132,6 +132,31 @@
                 <li>
                   <a
                     class="dropdown-item ps-4"
+                    href="{{ url_for('calculate_logistic') }}"
+                  >
+                    Application
+                  </a>
+                </li>
+
+                <li><hr class="dropdown-divider" /></li>
+
+                <!-- SUPPORT VECTOR MACHINE (SVM) -->
+                <li>
+                  <span class="dropdown-item-text fw-bold text-white">
+                    Support Vector Machine (SVM)
+                  </span>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item ps-4"
+                    href="{{ url_for('concepts_svm') }}"
+                  >
+                    Concepts
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item ps-4"
                     href="{{ url_for('calculate_svm') }}"
                   >
                     Application
@@ -153,24 +178,24 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('example') }}"
-                    >Use Case 1 (Regression)</a
-                  >
+                  <a class="dropdown-item" href="{{ url_for('example') }}">
+                    Use Case 1 (Regression)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('use_case_2') }}"
-                    >Use Case 2 (Classification)</a
-                  >
+                  <a class="dropdown-item" href="{{ url_for('use_case_2') }}">
+                    Use Case 2 (Classification)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('use_case3') }}"
-                    >Use Case 3 (Sentiment Analysis)</a
-                  >
+                  <a class="dropdown-item" href="{{ url_for('use_case3') }}">
+                    Use Case 3 (Sentiment Analysis)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('use_case4') }}"
-                    >Use Case 4 (House Price Prediction)</a
-                  >
+                  <a class="dropdown-item" href="{{ url_for('use_case4') }}">
+                    Use Case 4 (House Price Prediction)
+                  </a>
                 </li>
               </ul>
             </li>

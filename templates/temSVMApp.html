@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}SVM Application{% endblock %} {%
+block content %}
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Support Vector Machine Application</h4>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            <div class="mb-3">
+              <label for="email_text" class="form-label"
+                >Enter email text:</label
+              >
+              <textarea
+                class="form-control"
+                id="email_text"
+                name="email_text"
+                rows="4"
+              >
+{{ email_text }}</textarea
+              >
+            </div>
+            <button type="submit" class="btn btn-primary">Classify</button>
+          </form>
+
+          {% if result %}
+          <div class="alert alert-info mt-4">
+            <strong>Result:</strong> {{ result }}
+          </div>
+          {% endif %} {% if plot_url %}
+          <div class="mt-4 text-center">
+            <img
+              src="{{ plot_url }}"
+              alt="SVM Plot"
+              class="img-fluid rounded shadow"
+            />
+          </div>
+          {% endif %}
+
+          <p class="mt-4 text-muted">Dataset records: {{ records }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
