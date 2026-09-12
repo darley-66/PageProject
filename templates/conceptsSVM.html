@@ -1,0 +1,162 @@
+{% extends "base.html" %} {% block title %}Support Vector Machine Concepts{%
+endblock %} {% block content %}
+
+<style>
+  .concepts-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .concepts-container h1 {
+    font-size: 42px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .concepts-container h2 {
+    font-size: 26px;
+    color: #333;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+
+  .concepts-container p,
+  .concepts-container ul {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    text-align: justify;
+  }
+
+  .concepts-container ul {
+    margin-top: 15px;
+  }
+
+  .concepts-container li {
+    margin-bottom: 10px;
+  }
+
+  .formula {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 16px;
+    margin: 10px 0;
+    display: block;
+  }
+</style>
+
+<div class="concepts-container">
+  <h1>⚖️ Support Vector Machine (SVM)</h1>
+  <p class="lead text-center">Concepts, mathematics, and fundamentals of SVM</p>
+
+  <h2>Definition</h2>
+  <p>
+    Support Vector Machines (SVM) are supervised learning models used for
+    <strong>classification</strong> and <strong>regression</strong>. Their main
+    goal is to find the <em>optimal hyperplane</em> that separates data points
+    of different classes with the <strong>maximum margin</strong>.
+  </p>
+
+  <h2>Mathematical Formulation</h2>
+  <p>
+    Suppose we have a dataset with points
+    <span class="formula">(xᵢ, yᵢ)</span>, where
+    <span class="formula">xᵢ ∈ ℝⁿ</span> are the features and
+    <span class="formula">yᵢ ∈ {+1, -1}</span> are the class labels.
+  </p>
+  <p>
+    The hyperplane is defined as:
+    <span class="formula">w · x + b = 0</span>
+  </p>
+  <p>
+    The classification rule is:
+    <span class="formula">f(x) = sign(w · x + b)</span>
+  </p>
+  <p>To maximize the margin, SVM solves the following optimization problem:</p>
+  <span class="formula">
+    Minimize: (1/2) ||w||² <br />
+    Subject to: yᵢ (w · xᵢ + b) ≥ 1, ∀ i
+  </span>
+
+  <h2>Key Ideas</h2>
+  <ul>
+    <li>
+      📐 <strong>Hyperplane:</strong> The decision boundary separating classes.
+      In 2D it is a line, in 3D a plane, and in higher dimensions a hyperplane.
+    </li>
+    <li>
+      🔑 <strong>Support Vectors:</strong> The critical data points closest to
+      the hyperplane. They define the margin and are the most important for the
+      model.
+    </li>
+    <li>
+      ⚙️ <strong>Kernel Trick:</strong> Technique that allows SVM to classify
+      data that is not linearly separable by mapping it into a
+      higher-dimensional space. Examples:
+      <ul>
+        <li>Linear Kernel: <span class="formula">K(x, z) = x · z</span></li>
+        <li>
+          Polynomial Kernel:
+          <span class="formula">K(x, z) = (x · z + 1)^d</span>
+        </li>
+        <li>
+          Radial Basis Function (RBF):
+          <span class="formula">K(x, z) = exp(-γ ||x - z||²)</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Soft Margin SVM</h2>
+  <p>
+    In real-world problems, perfect separation is not always possible. SVM
+    introduces slack variables ξᵢ to allow misclassifications:
+  </p>
+  <span class="formula">
+    Minimize: (1/2) ||w||² + C Σ ξᵢ <br />
+    Subject to: yᵢ (w · xᵢ + b) ≥ 1 - ξᵢ, ξᵢ ≥ 0
+  </span>
+  <p>
+    Here, <strong>C</strong> is a regularization parameter that controls the
+    trade-off between maximizing the margin and minimizing classification
+    errors.
+  </p>
+
+  <h2>Applications</h2>
+  <ul>
+    <li>📧 Spam detection (emails classified as spam or not spam)</li>
+    <li>🩺 Medical diagnosis (healthy vs. sick)</li>
+    <li>📷 Image recognition (object classification)</li>
+    <li>🔒 Fraud detection (legitimate vs. fraudulent transactions)</li>
+  </ul>
+
+  <h2>Advantages</h2>
+  <ul>
+    <li>Works well with high-dimensional data</li>
+    <li>
+      Effective when the number of features is greater than the number of
+      samples
+    </li>
+    <li>Robust against overfitting, especially with proper kernel choice</li>
+  </ul>
+
+  <h2>Limitations</h2>
+  <ul>
+    <li>Training can be slow for very large datasets</li>
+    <li>Choice of kernel and parameters (C, γ) is critical</li>
+    <li>
+      Less interpretable compared to simpler models like Logistic Regression
+    </li>
+  </ul>
+</div>
+
+{% endblock %}

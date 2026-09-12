@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block title %}Credit Risk Evaluation - Data with
+Roots{% endblock %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white p-3">
+        <h4 class="card-title mb-0">Credit Risk Evaluation</h4>
+      </div>
+      <div class="card-body p-4">
+        <h5 class="card-subtitle mb-3 text-muted">
+          Logistic Regression: Default Risk Classification
+        </h5>
+
+        <!-- Formulario -->
+        <form method="post" action="{{ url_for('calculate_logistic') }}">
+          <div class="mb-3">
+            <label for="duration_months" class="form-label fw-bold"
+              >Duration (months):</label
+            >
+            <input
+              type="number"
+              min="1"
+              class="form-control form-control-lg"
+              id="duration_months"
+              name="duration_months"
+              value="{{ duration if duration else 24 }}"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="credit_amount" class="form-label fw-bold"
+              >Credit Amount ($):</label
+            >
+            <input
+              type="number"
+              step="any"
+              min="1"
+              class="form-control form-control-lg"
+              id="credit_amount"
+              name="credit_amount"
+              value="{{ amount if amount else 3000 }}"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="age" class="form-label fw-bold">Applicant Age:</label>
+            <input
+              type="number"
+              min="18"
+              max="100"
+              class="form-control form-control-lg"
+              id="age"
+              name="age"
+              value="{{ age if age else 30 }}"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 btn-lg">
+            Evaluate Risk
+          </button>
+        </form>
+
+        <!-- Resultado -->
+        {% if result is not none and result %}
+        <div
+          class="alert {% if result.approved %}alert-success{% else %}alert-danger{% endif %} mt-4 mb-0 d-flex align-items-center"
+          role="alert"
+        >
+          <i
+            class="bi {% if result.approved %}bi-check-circle-fill{% else %}bi-exclamation-triangle-fill{% endif %} fs-4 me-3"
+          ></i>
+          <div>
+            <h5 class="alert-heading mb-1">
+              {% if result.approved %} Result:
+              <strong>Approved (Low Risk)</strong> {% else %} Result:
+              <strong>Rejected (High Risk)</strong>
+              {% endif %}
+            </h5>
+            <p class="mb-0">
+              Default Probability:
+              <strong
+                >{{ "%.2f"|format(result.default_probability * 100) }}%</strong
+              >
+            </p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Métricas -->
+        {% if metrics %}
+        <h3 class="mt-4">📊 Model Performance</h3>
+        <table class="table table-bordered text-center mt-3">
+          <thead class="table-dark">
+            <tr>
+              <th>Accuracy</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1 Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ "%.2f"|format(metrics['accuracy'] * 100) }}%</td>
+              <td>{{ "%.2f"|format(metrics['precision'] * 100) }}%</td>
+              <td>{{ "%.2f"|format(metrics['recall'] * 100) }}%</td>
+              <td>{{ "%.2f"|format(metrics['f1'] * 100) }}%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 class="mt-4">Confusion Matrix</h4>
+        <pre>{{ metrics['confusion_matrix'] }}</pre>
+
+        <div class="alert alert-info mt-4 mb-0">
+          <strong>Model Information:</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>Intercept:</strong> {{ metrics['intercept'] }}</li>
+            <li>
+              <strong>Coefficients:</strong>
+              <ul>
+                <li>
+                  Duration (months): {{
+                  metrics['coefficients']['duration_months'] }}
+                </li>
+                <li>
+                  Credit Amount ($): {{ metrics['coefficients']['credit_amount']
+                  }}
+                </li>
+                <li>Age: {{ metrics['coefficients']['age'] }}</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

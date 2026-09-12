@@ -1,37 +1,44 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import io
-import base64
+import io, base64
 from sklearn.linear_model import LinearRegression
 
-data = {
-    "Study Hours": [1, 2, 3, 4, 5, 6, 7, 8],
-    "Final Grade": [2.0, 2.5, 3.0, 3.5, 3.7, 4.0, 4.2, 4.5]
-}
+# Cargar dataset
+df = pd.read_csv("data/Student_Performance.csv")
 
-df = pd.DataFrame(data)
+# Asegurar tipos numéricos y limpiar
+df["study_hours"] = pd.to_numeric(df["study_hours"], errors="coerce")
+df["overall_score"] = pd.to_numeric(df["overall_score"], errors="coerce")
+df = df.dropna(subset=["study_hours", "overall_score"])
 
-x = df[["Study Hours"]]
-y = df["Final Grade"]
+# Variables
+X = df[["study_hours"]]
+y = df["overall_score"]
 
+# Entrenar modelo
 model = LinearRegression()
-model.fit(x, y)
+model.fit(X, y)
 
-def CalculateGrade(hours):
-    return model.predict(pd.DataFrame([[hours]], columns=["Study Hours"]))[0]
+def CalculateGrade(hours: float) -> float:
+    return float(model.predict([[hours]])[0])
 
-def GeneratePlot():
+def GeneratePlot(hours: float = None) -> str:
     plt.figure(figsize=(6,4))
-    plt.scatter(x, y, color="blue", label="Datos reales")
-    plt.plot(x, model.predict(x), color="red", label="Regresión lineal")
+    plt.scatter(X, y, color="blue", alpha=0.5, label="Datos reales")
+    plt.plot(X, model.predict(X), color="red", label="Regresión lineal")
+
+    if hours is not None:
+        predicted = CalculateGrade(hours)
+        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Predicción")
+
     plt.xlabel("Study Hours")
-    plt.ylabel("Final Grade")
-    plt.title("Linear Regression Example")
+    plt.ylabel("Overall Score")
+    plt.title("Linear Regression - Study Hours vs Overall Score")
     plt.legend()
+
     img = io.BytesIO()
     plt.savefig(img, format="png")
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode("utf8")
     plt.close()
-    print("Longitud del string base64:", len(plot_url))
-    return plot_url
+    return f"data:image/png;base64,{plot_url}"
