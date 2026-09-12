@@ -1,41 +1,45 @@
-import pandas as pd 
+import pandas as pd
 import matplotlib.pyplot as plt
-import io 
-import base64
+import io, base64
 from sklearn.linear_model import LinearRegression
 
+# Cargar dataset Student Performance
+df = pd.read_csv("data/Student_Performance.csv")
 
+# Asegurar tipos numéricos y limpiar
+df["study_hours"] = pd.to_numeric(df["study_hours"], errors="coerce")
+df["overall_score"] = pd.to_numeric(df["overall_score"], errors="coerce")
+df = df.dropna(subset=["study_hours", "overall_score"])
 
-data = {
-    "Study Hours": [10, 15, 12, 8, 14, 5, 16, 7, 11, 13, 9, 4, 18, 3, 17, 6, 14, 2, 20, 1],
-    "Final Grade": [3.8, 4.2, 3.6, 3, 4.5, 2.5, 4.8, 2.8, 3.7, 4, 3.2, 2.2, 5, 1.8, 4.9, 2.7, 4.4, 1.5, 5, 1]
-}
+# Variables
+X = df[["study_hours"]]   # independiente
+y = df["overall_score"]   # dependiente
 
-df = pd.DataFrame(data)
-
-x= df[["Study Hours"]]
-y= df["Final Grade"]
-
-model =LinearRegression()
-model.fit(x,y)
+# Entrenar modelo
+model = LinearRegression()
+model.fit(X, y)
 
 def CalculateGrade(hours):
-    return model.predict(pd.DataFrame([[hours]], columns=["Study Hours"]))[0]
+    return model.predict(pd.DataFrame([[hours]], columns=["study_hours"]))[0]
 
-
-def GeneratePlot():
+def GeneratePlot(hours=None):
     plt.figure(figsize=(6,4))
-    plt.scatter(x, y, color="blue", label="Datos reales")
-    plt.plot(x, model.predict(x), color="red", label="Regresión lineal")
+    plt.scatter(X, y, color="blue", alpha=0.5, label="Datos reales")
+    plt.plot(X, model.predict(X), color="red", label="Regresión lineal")
+
+    # Punto dinámico según lo que ingrese el usuario
+    if hours is not None:
+        predicted = CalculateGrade(hours)
+        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Predicción")
+
     plt.xlabel("Study Hours")
-    plt.ylabel("Final Grade")
-    plt.title("Linear Regression Example")
+    plt.ylabel("Overall Score")
+    plt.title("Linear Regression - Study Hours vs Overall Score")
     plt.legend()
 
     img = io.BytesIO()
     plt.savefig(img, format="png")
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode("utf8")
-    print("Longitud del string base64:", len(plot_url))
     plt.close()
-    return plot_url
+    return f"data:image/png;base64,{plot_url}"
