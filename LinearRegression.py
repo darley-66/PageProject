@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import io, base64
 from sklearn.linear_model import LinearRegression
 
-# Cargar dataset Student Performance
+# Cargar dataset
 df = pd.read_csv("data/Student_Performance.csv")
 
 # Asegurar tipos numéricos y limpiar
@@ -12,22 +12,21 @@ df["overall_score"] = pd.to_numeric(df["overall_score"], errors="coerce")
 df = df.dropna(subset=["study_hours", "overall_score"])
 
 # Variables
-X = df[["study_hours"]]   # independiente
-y = df["overall_score"]   # dependiente
+X = df[["study_hours"]]
+y = df["overall_score"]
 
 # Entrenar modelo
 model = LinearRegression()
 model.fit(X, y)
 
-def CalculateGrade(hours):
-    return model.predict(pd.DataFrame([[hours]], columns=["study_hours"]))[0]
+def CalculateGrade(hours: float) -> float:
+    return float(model.predict([[hours]])[0])
 
-def GeneratePlot(hours=None):
+def GeneratePlot(hours: float = None) -> str:
     plt.figure(figsize=(6,4))
     plt.scatter(X, y, color="blue", alpha=0.5, label="Datos reales")
     plt.plot(X, model.predict(X), color="red", label="Regresión lineal")
 
-    # Punto dinámico según lo que ingrese el usuario
     if hours is not None:
         predicted = CalculateGrade(hours)
         plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Predicción")
