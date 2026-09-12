@@ -1,0 +1,157 @@
+{% extends "base.html" %} {% block title %}Logistic Regression Concepts{%
+endblock %} {% block content %}
+
+<style>
+  .concepts-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .concepts-container h1 {
+    font-size: 42px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .concepts-container h2 {
+    font-size: 28px;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+
+  .concepts-container p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    text-align: justify;
+  }
+
+  .concepts-container ul {
+    text-align: left;
+    margin-top: 15px;
+    font-size: 17px;
+    color: #444;
+  }
+
+  .concepts-container li {
+    margin-bottom: 10px;
+  }
+</style>
+
+<div class="concepts-container">
+  <h1>📊 Logistic Regression Concepts</h1>
+
+  <h2>Definition</h2>
+  <p>
+    Logistic Regression is a supervised learning algorithm mainly used for
+    classification problems. Despite its name, it is not a regression model but
+    a classification model. It belongs to the family of Generalized Linear
+    Models (GLM), where the output is transformed using the logistic (sigmoid)
+    function to produce probabilities between 0 and 1.
+  </p>
+
+  <h2>History</h2>
+  <p>
+    The logistic function was introduced in the 19th century by Pierre-François
+    Verhulst to model population growth. Later, Joseph Berkson (1940s) and David
+    Cox (1958) formalized Logistic Regression as a statistical technique. Since
+    then, it has become a key tool in medicine, social sciences, economics, and
+    machine learning.
+  </p>
+
+  <h2>Mathematical Foundations</h2>
+  <p>
+    The logistic function is defined as:
+    <br />
+    <em>P(Y=1|X) = 1 / (1 + e<sup>-(β₀ + β₁X₁ + ... + βₙXₙ)}</sup>)</em>
+  </p>
+  <p>
+    The log-odds (logit) is:
+    <br />
+    <em>logit(p) = ln(p / (1 - p))</em>
+  </p>
+  <p>
+    The model is trained using Maximum Likelihood Estimation (MLE), adjusting
+    coefficients to maximize the probability of observing the given data.
+  </p>
+
+  <h2>Types of Logistic Regression</h2>
+  <ul>
+    <li>
+      <strong>Binomial Logistic Regression:</strong> Two classes (e.g., spam vs.
+      not spam).
+    </li>
+    <li>
+      <strong>Multinomial Logistic Regression:</strong> Multiple unordered
+      classes (e.g., cat, dog, sheep).
+    </li>
+    <li>
+      <strong>Ordinal Logistic Regression:</strong> Ordered classes (e.g., low,
+      medium, high).
+    </li>
+  </ul>
+
+  <h2>Assumptions</h2>
+  <ul>
+    <li>Observations are independent.</li>
+    <li>The dependent variable is categorical.</li>
+    <li>Linear relationship between predictors and log-odds.</li>
+    <li>No strong multicollinearity among predictors.</li>
+    <li>Sufficient sample size for stability.</li>
+  </ul>
+
+  <h2>Model Training Steps</h2>
+  <ul>
+    <li>
+      Exploratory Data Analysis (EDA): review distributions and correlations.
+    </li>
+    <li>Verify assumptions.</li>
+    <li>Fit the model: estimate coefficients and odds ratios.</li>
+    <li>
+      Evaluate performance: confusion matrix, ROC-AUC, precision, recall,
+      F1-score.
+    </li>
+    <li>Apply regularization (L1/Lasso, L2/Ridge) to avoid overfitting.</li>
+  </ul>
+
+  <h2>Interpretation</h2>
+  <p>
+    Each coefficient β indicates the change in log-odds for a one-unit increase
+    in the variable. By exponentiating β, we obtain the odds ratio, which shows
+    how much the probability increases or decreases.
+  </p>
+
+  <h2>Modern Use Cases</h2>
+  <ul>
+    <li><strong>Medicine:</strong> Disease diagnosis.</li>
+    <li><strong>Finance:</strong> Credit scoring.</li>
+    <li><strong>Marketing:</strong> Customer churn prediction.</li>
+    <li><strong>Cybersecurity:</strong> Spam and fraud detection.</li>
+    <li><strong>Education:</strong> Academic performance prediction.</li>
+  </ul>
+
+  <h2>Example</h2>
+  <p>
+    If a model predicts that a student has P(pass) = 0.85, it means there is an
+    85% probability of passing. With a threshold of 0.5, the student is
+    classified as "pass".
+  </p>
+
+  <h2>Why It Matters</h2>
+  <p>
+    Logistic Regression is simple, efficient, and interpretable. It is often the
+    first choice for binary classification problems and serves as a baseline
+    model before moving to more complex algorithms like Support Vector Machines
+    or Neural Networks.
+  </p>
+</div>
+
+{% endblock %}

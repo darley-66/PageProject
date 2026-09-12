@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block title %}SVM Application{% endblock %} {%
+block content %}
+<div class="container my-5">
+  <h1 class="text-center text-primary">
+    🔬 Support Vector Machine Application
+  </h1>
+  <p class="lead text-center">
+    Predict Breast Cancer class (Benign vs Malignant) using SVM
+  </p>
+
+  <!-- Formulario -->
+  <form method="POST" class="mt-4">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="mean_radius" class="form-label">Mean Radius</label>
+        <input
+          type="number"
+          step="any"
+          class="form-control"
+          name="mean_radius"
+          required
+        />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="mean_texture" class="form-label">Mean Texture</label>
+        <input
+          type="number"
+          step="any"
+          class="form-control"
+          name="mean_texture"
+          required
+        />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="mean_perimeter" class="form-label">Mean Perimeter</label>
+        <input
+          type="number"
+          step="any"
+          class="form-control"
+          name="mean_perimeter"
+          required
+        />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Predict</button>
+  </form>
+
+  <!-- Resultado -->
+  {% if result %} {% if result == "Benign" %}
+  <div class="alert alert-success mt-4 text-center">
+    ✅ Prediction: <strong>{{ result }}</strong>
+  </div>
+  {% elif result == "Malignant" %}
+  <div class="alert alert-danger mt-4 text-center">
+    ⚠️ Prediction: <strong>{{ result }}</strong>
+  </div>
+  {% else %}
+  <div class="alert alert-warning mt-4 text-center">{{ result }}</div>
+  {% endif %} {% endif %}
+
+  <!-- Métricas -->
+  <div class="mt-5">
+    <h3 class="text-center">📈 Model Performance</h3>
+    <table class="table table-bordered text-center mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Accuracy</th>
+          <th>Precision</th>
+          <th>Recall</th>
+          <th>F1 Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ "%.2f"|format(metrics.accuracy) }}</td>
+          <td>{{ "%.2f"|format(metrics.precision) }}</td>
+          <td>{{ "%.2f"|format(metrics.recall) }}</td>
+          <td>{{ "%.2f"|format(metrics.f1) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Visualización -->
+  <!-- Visualización -->
+  <div class="mt-5 text-center">
+    <h3 class="text-center">📊 Dataset Visualization</h3>
+    <p class="text-center">
+      Scatterplot of Mean Radius vs Mean Texture colored by class
+    </p>
+    <img
+      src="data:image/png;base64,{{ plot_url }}"
+      class="img-fluid rounded shadow mx-auto d-block"
+    />
+  </div>
+</div>
+{% endblock %}
