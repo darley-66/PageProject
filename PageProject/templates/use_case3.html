@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Use Case 3 - Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Use Case 3</h1>
+    <p class="lead text-muted">Social Media Sentiment Analysis</p>
+</div>
+
+<div class="row g-4">
+    <!-- Use Case Name -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Use Case Name</div>
+            <div class="card-body">
+                <h5 class="card-title">Sentiment Analysis of Social Media Posts</h5>
+                <p class="card-text">A system that classifies user comments or tweets as positive, negative, or neutral.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Context -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Problem Context</div>
+            <div class="card-body">
+                <p class="card-text">Companies and organizations need to understand public opinion about their products or services. Manual review of thousands of posts is impractical.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data That Could Be Used -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Data That Could Be Used</div>
+            <div class="card-body">
+                <ul>
+                    <li>Text of tweets, comments, or reviews.</li>
+                    <li>Hashtags and emojis used.</li>
+                    <li>Metadata such as posting time or location.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">What Should the Model Predict?</div>
+            <div class="card-body">
+                <p class="card-text">The model should classify each post into categories: <span class="badge bg-success">Positive</span>, <span class="badge bg-danger">Negative</span>, or <span class="badge bg-secondary">Neutral</span>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Type of ML -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Type of Machine Learning</div>
+            <div class="card-body">
+                <span class="badge bg-primary fs-6">Supervised Learning — Text Classification</span>
+                <p class="card-text mt-3">Trained with labeled datasets of posts tagged with sentiment categories.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefit -->
+    <div class="col-md-12">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">Potential Benefit</div>
+            <div class="card-body">
+                <p class="card-text">Helps companies monitor brand reputation, improve customer service, and detect crises early.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
