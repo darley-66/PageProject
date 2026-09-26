@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort, send_file
 from models.linear_regression import CalculateGrade, GeneratePlot
 from models.logistic_regression import PredictRisk, implementLogisticRegression
-from flask import Blueprint, render_template
 from Kmeans import KMeans
 
 from models.svm_model import (
@@ -23,7 +22,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io, base64
-from flask import Flask, render_template, request
 from SGDRegression import train, GRID, START, GOAL, ACTION_NAMES
 # Librerías para SVM y métricas
 from sklearn.datasets import load_breast_cancer
@@ -32,6 +30,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, r2_score, mean_squared_error
 
 app = Flask(__name__)
+print("APP PRINCIPAL EJECUTANDOSE")
 BASE_DIR = Path(__file__).resolve().parent
 
 # ============================
@@ -252,15 +251,6 @@ def use_case3():
 def use_case4():
     return render_template("use_case4.html")
 
-if __name__ == "__main__":
-    app.run(debug=True)
-import os
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-    
-app = Flask(__name__)
 @app.route('/SGDRegression', methods=['GET', 'POST'])
 def reinforcement():
     result = None
@@ -275,8 +265,6 @@ def reinforcement():
         goal=GOAL,
         actions=ACTION_NAMES,
     )
-if __name__ == '__main__':
-    app.run()
 
 @app.route("/kmeans-app/")
 def kmeans_app():
@@ -288,5 +276,17 @@ def kmeans_app():
         results=result_data["results"],
         summary=result_data["summary"],
         centroids=result_data["centroids"],
-        score=result_data.get("silhouette_score")
+        score=result_data.get("silhouette_score"),
+        feature_cols=result_data["feature_cols"],
+        plot_path=result_data["plot_path"],
     )
+
+
+@app.route("/kmeans-plot/<path:relative_path>")
+def kmeans_plot_file(relative_path):
+    if relative_path != "outputs/kmeans_clusters.png":
+        abort(404)
+    return send_file(BASE_DIR / relative_path, mimetype="image/png")
+
+if __name__ == "__main__":
+    app.run(debug=True)

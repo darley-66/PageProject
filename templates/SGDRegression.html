@@ -20,12 +20,6 @@
 <tr>
 {% for column in range(4) %}
 {% set position = (row, column) %}
-
-<!-- Insert the td cell shown on the next slide here. -->
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
 <td class="{% if grid[row][column] == 1 %}wall
 {% elif result and position in result.path %}path
 {% endif %}">
@@ -33,7 +27,11 @@
 {% elif position == goal %}G
 {% elif grid[row][column] == 1 %}#
 {% else %}·{% endif %}
-</td> 
+</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
 <!-- Choose the cell style and its visible label. -->
 
 <!-- Display results only after training. -->
@@ -46,6 +44,7 @@
 </p>
 <!-- Insert the evaluation and Q-table here. -->
 {% endif %}
+{% if result %}
 <!-- Report whether evaluation reached the goal. -->
 <h2>Evaluation without exploration</h2>
 {% if result.reached_goal %}
@@ -79,6 +78,7 @@ moves!</p>
 </tr>
 {% endfor %}
 </table>
+{% endif %}
 <!-- Style the grid and the results tables. -->
 <style>
 body { font-family: sans-serif; max-width: 850px;

@@ -183,11 +183,22 @@
                   </a>
                 </li>
                 <li>
+                  <a class="dropdown-item" href="{{ url_for('kmeans_app') }}">
+                    K-Means Application
+                  </a>
+                </li>
+                <li>
                   <a class="dropdown-item" href="{{ url_for('kmeans_manual') }}">
                     Manual Exercise
                   </a>
                 </li>
               </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('reinforcement') }}">
+                Reinforcement Learning (SGD)
+              </a>
             </li>
 
             <!-- USE CASES -->

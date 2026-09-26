@@ -1,19 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if feature_cols is defined and feature_cols %}
+    {% set display_features = feature_cols %}
+{% elif results %}
+    {% set display_features = results[0].keys() | reject("in", ["CustomerID", "cluster"]) | list %}
+{% else %}
+    {% set display_features = ["PurchaseFrequency", "TotalSpending", "AverageSpending"] %}
+{% endif %}
+
+{% if silhouette_score is defined and silhouette_score is not none %}
+    {% set displayed_score = silhouette_score %}
+{% elif score is defined and score is not none %}
+    {% set displayed_score = score %}
+{% else %}
+    {% set displayed_score = none %}
+{% endif %}
+
 <div class="container my-5">
     <h2 class="text-center mb-4">E-Commerce Customer Segmentation (K-Means)</h2>
-    
-    <!-- Métrica de Evaluación: Silhouette Score -->
-    {% if score %}
+
+    {% if displayed_score is not none %}
     <div class="alert alert-info shadow-sm" role="alert">
         <h4 class="alert-heading">Model Evaluation</h4>
-        <p class="mb-0"><strong>Silhouette Score:</strong> {{ "%.4f"|format(score) }} (Mide qué tan bien definidos y separados están los clústeres).</p>
+        <p class="mb-0"><strong>Silhouette Score:</strong> {{ "%.4f"|format(displayed_score) }} (Mide qué tan bien definidos y separados están los clústeres).</p>
+    </div>
+    {% endif %}
+
+    {% if plot_path %}
+    <div class="mb-4">
+        <img
+            class="img-fluid border rounded"
+            src="{{ url_for('kmeans_plot_file', relative_path=plot_path) }}"
+            alt="Customer clusters by purchase frequency and total spending; spending axis uses a logarithmic scale"
+        >
     </div>
     {% endif %}
 
     <div class="row">
-        <!-- Sección de Centroides -->
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-primary text-white">
@@ -24,14 +48,18 @@
                         <thead>
                             <tr>
                                 <th>Cluster</th>
-                                <th>Coordinates [Age, Income, Spending]</th>
+                                {% for feature in display_features %}
+                                <th>{{ feature }}</th>
+                                {% endfor %}
                             </tr>
                         </thead>
                         <tbody>
                             {% for centroid in centroids %}
                             <tr>
                                 <td><span class="badge bg-primary">Cluster {{ loop.index0 }}</span></td>
-                                <td><code>{{ centroid }}</code></td>
+                                {% for feature in display_features %}
+                                <td>{{ "%.2f"|format(centroid[loop.index0]) }}</td>
+                                {% endfor %}
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -40,7 +68,6 @@
             </div>
         </div>
 
-        <!-- Sección de Resumen por Clúster -->
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-success text-white">
@@ -60,7 +87,6 @@
         </div>
     </div>
 
-    <!-- Tabla Completa de Registros Asignados -->
     <div class="card shadow-sm">
         <div class="card-header bg-dark text-white">
             <h5 class="mb-0">Customer Dataset & Cluster Assignments</h5>
@@ -70,20 +96,22 @@
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark sticky-top">
                         <tr>
-                            <th>Age</th>
-                            <th>Annual Income</th>
-                            <th>Spending Score</th>
+                            <th>Customer ID</th>
+                            {% for feature in display_features %}
+                            <th>{{ feature }}</th>
+                            {% endfor %}
                             <th>Assigned Cluster</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for row in results %}
                         <tr>
-                            <td>{{ row.Age }}</td>
-                            <td>{{ row.AnnualIncome }}</td>
-                            <td>{{ row.SpendingScore }}</td>
+                            <td>{{ row["CustomerID"] }}</td>
+                            {% for feature in display_features %}
+                            <td>{{ row[feature] }}</td>
+                            {% endfor %}
                             <td>
-                                <span class="badge bg-secondary">Cluster {{ row.cluster }}</span>
+                                <span class="badge bg-secondary">Cluster {{ row["cluster"] }}</span>
                             </td>
                         </tr>
                         {% endfor %}

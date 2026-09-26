@@ -83,33 +83,30 @@ def train(episodes=1000):
         for _ in range(100):
             if rng.random() < epsilon:
                 action = rng.randrange(NUMBER_OF_ACTIONS)
-        else:
-            q_values = predict_q_values(model, state)
-            best_actions = np.flatnonzero(
-                q_values == q_values.max()
+            else:
+                q_values = predict_q_values(model, state)
+                best_actions = np.flatnonzero(
+                    q_values == q_values.max()
                 ).tolist()
-            action = rng.choice(best_actions)
+                action = rng.choice(best_actions)
 
-        next_state, reward, terminated = step(state, action)
-        # Terminal states have no future reward.
-        if terminated:
-            target = float(reward)
-        else:
-            next_q_values = predict_q_values(model, next_state)
-            target = reward + gamma * float(next_q_values.max())
+            next_state, reward, terminated = step(state, action)
+            if terminated:
+                target = float(reward)
+            else:
+                next_q_values = predict_q_values(model, next_state)
+                target = reward + gamma * float(next_q_values.max())
 
-        # Learn from one observed transition.
-        features = encode(state, action).reshape(1, -1)
-        model.partial_fit(features, np.array([target]))
-        state = next_state
-        total += reward
-        if terminated:
-            successes += 1
-            break
+            features = encode(state, action).reshape(1, -1)
+            model.partial_fit(features, np.array([target]))
+            state = next_state
+            total += reward
+            if terminated:
+                successes += 1
+                break
 
-    # Record one total per episode.
-    rewards.append(total)
-    epsilon = max(0.05, epsilon * 0.995)
+        rewards.append(total)
+        epsilon = max(0.05, epsilon * 0.995)
 
     # Evaluate without updating the model.
     state = START
@@ -136,13 +133,11 @@ def train(episodes=1000):
     for row in range(ROWS):
         for column in range(COLUMNS):
             position = (row, column)
-        if GRID[row][column] == 0 and position != GOAL:
-            q_table.append({
-            "state": position,
-            "action_values": predict_q_values(
-            model, position
-            ).tolist(),
-            })
+            if GRID[row][column] == 0 and position != GOAL:
+                q_table.append({
+                    "state": position,
+                    "action_values": predict_q_values(model, position).tolist(),
+                })
 
     return {
         "episodes": episodes,
