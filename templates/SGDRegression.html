@@ -7,7 +7,190 @@
 </head>
 <body>
 <h1>Q-Learning: find the exit</h1>
-<!-- Insert the form, grid, and results here. -->
+{% extends "base.html" %}
+{% block title %}Reinforcement Learning | Data with Roots{% endblock %}
+
+{% macro action_arrow(action) -%}
+{% if action == "Up" %}↑{% elif action == "Down" %}↓{% elif action == "Left" %}←{% else %}→{% endif %}
+{%- endmacro %}
+
+{% block content %}
+<section class="rl-page">
+	<header class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+		<div>
+			<p class="text-uppercase text-success fw-semibold small mb-1">Reinforcement Learning</p>
+			<h1 class="h2 mb-1">Q-Learning: Find the Exit</h1>
+			<p class="text-secondary mb-0">Train an agent to navigate the grid and reach the goal.</p>
+		</div>
+		<form method="post" action="{{ url_for('reinforcement') }}">
+			<button class="btn btn-success px-4" type="submit">
+				<i class="bi bi-play-fill me-1" aria-hidden="true"></i>
+				Train for 1000 episodes
+			</button>
+		</form>
+	</header>
+
+	<section class="mb-5" aria-labelledby="grid-heading">
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<h2 class="h5 mb-0" id="grid-heading">Environment</h2>
+			<div class="d-flex flex-wrap gap-3 small text-secondary" aria-label="Grid legend">
+				<span><i class="legend-swatch start-swatch"></i>Start</span>
+				<span><i class="legend-swatch goal-swatch"></i>Goal</span>
+				<span><i class="legend-swatch wall-swatch"></i>Obstacle</span>
+				<span><i class="legend-swatch path-swatch"></i>Learned path</span>
+			</div>
+		</div>
+		<div class="rl-board-wrap">
+			<div class="rl-grid" role="grid" aria-label="Four by four Q-learning environment">
+				{% for row in range(4) %}
+					{% for column in range(4) %}
+						{% set position = (row, column) %}
+						{% if grid[row][column] == 1 %}
+							<div class="rl-cell wall" role="gridcell" aria-label="Obstacle">#</div>
+						{% elif position == start %}
+							<div class="rl-cell start" role="gridcell" aria-label="Start">S</div>
+						{% elif position == goal %}
+							<div class="rl-cell goal" role="gridcell" aria-label="Goal">G</div>
+						{% elif result and position in result.path %}
+							<div class="rl-cell learned-path" role="gridcell" aria-label="Learned path">•</div>
+						{% else %}
+							<div class="rl-cell normal" role="gridcell" aria-label="Open cell">·</div>
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+
+	{% if result %}
+	<section class="mb-5" aria-labelledby="results-heading">
+		<h2 class="h5 mb-3" id="results-heading">Training results</h2>
+		<div class="row g-3 mb-4">
+			<div class="col-12 col-md-4">
+				<article class="card metric-card h-100">
+					<div class="card-body">
+						<p class="metric-label">Episodes</p>
+						<p class="metric-value">{{ result.episodes }}</p>
+					</div>
+				</article>
+			</div>
+			<div class="col-12 col-md-4">
+				<article class="card metric-card h-100">
+					<div class="card-body">
+						<p class="metric-label">Goal reached</p>
+						<p class="metric-value">{{ result.successes }} <span class="metric-suffix">/ {{ result.episodes }}</span></p>
+					</div>
+				</article>
+			</div>
+			<div class="col-12 col-md-4">
+				<article class="card metric-card h-100">
+					<div class="card-body">
+						<p class="metric-label">Mean reward</p>
+						<p class="metric-value">{{ result.final_average }}</p>
+						<p class="small text-secondary mb-0">Last 100 episodes</p>
+					</div>
+				</article>
+			</div>
+		</div>
+
+		{% if result.reached_goal %}
+		<div class="alert alert-success d-flex align-items-center gap-3" role="status">
+			<i class="bi bi-check-circle-fill fs-4" aria-hidden="true"></i>
+			<div><strong>Goal reached in {{ result.steps|length }} moves</strong></div>
+		</div>
+		{% else %}
+		<div class="alert alert-warning d-flex align-items-center gap-3" role="status">
+			<i class="bi bi-exclamation-circle-fill fs-4" aria-hidden="true"></i>
+			<div>The goal was not reached within 100 moves.</div>
+		</div>
+		{% endif %}
+	</section>
+
+	<section class="mb-5" aria-labelledby="evaluation-heading">
+		<h2 class="h5 mb-3" id="evaluation-heading">Evaluation without exploration</h2>
+		<div class="table-responsive border rounded bg-white">
+			<table class="table table-hover table-striped align-middle mb-0">
+				<thead class="table-dark">
+					<tr><th scope="col">Step</th><th scope="col">State</th><th scope="col">Action</th><th scope="col">Next state</th><th scope="col">Reward</th></tr>
+				</thead>
+				<tbody>
+					{% for step_info in result.steps %}
+					<tr>
+						<td>{{ step_info.number }}</td>
+						<td>{{ step_info.state }}</td>
+						<td><span class="action-token"><span class="action-arrow">{{ action_arrow(step_info.action) }}</span>{{ step_info.action }}</span></td>
+						<td>{{ step_info.next_state }}</td>
+						<td>{{ step_info.reward }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<section aria-labelledby="q-table-heading">
+		<h2 class="h5 mb-3" id="q-table-heading">Q-Table</h2>
+		<div class="table-responsive border rounded bg-white">
+			<table class="table table-hover table-striped align-middle text-center mb-0">
+				<thead class="table-dark">
+					<tr>
+						<th scope="col" class="text-start">State</th>
+						{% for action in actions %}
+						<th scope="col"><span class="action-arrow">{{ action_arrow(action) }}</span><span class="d-block">{{ action }}</span></th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for row in result.q_table %}
+					{% set best_value = row.action_values|max %}
+					{% set best_index = row.action_values.index(best_value) %}
+					<tr>
+						<th scope="row" class="text-start">{{ row.state }}</th>
+						{% for value in row.action_values %}
+						<td class="{% if loop.index0 == best_index %}q-best{% endif %}">
+							<span>{{ '%.2f'|format(value) }}</span>
+							{% if loop.index0 == best_index %}
+							<span class="badge text-bg-success d-block mt-1">Best {{ action_arrow(actions[loop.index0]) }}</span>
+							{% endif %}
+						</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
+	{% endif %}
+</section>
+
+<style>
+	.rl-page { max-width: 1040px; margin-inline: auto; }
+	.metric-card { border: 1px solid #dce5e1; border-radius: 6px; box-shadow: 0 2px 8px rgba(24, 49, 41, 0.05); }
+	.metric-label { color: #53645e; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
+	.metric-value { color: #173f32; font-size: 1.75rem; font-weight: 700; line-height: 1.1; margin-bottom: 0; }
+	.metric-suffix { color: #718079; font-size: 1rem; font-weight: 500; }
+	.rl-board-wrap { display: flex; justify-content: center; padding: 1.25rem; background: #f1f5f3; border: 1px solid #dfe8e3; border-radius: 8px; }
+	.rl-grid { display: grid; grid-template-columns: repeat(4, minmax(58px, 82px)); gap: 8px; }
+	.rl-cell { aspect-ratio: 1; display: grid; place-items: center; border: 1px solid #d7e0db; border-radius: 6px; background: #fff; color: #53645e; font-size: 1.35rem; font-weight: 700; }
+	.rl-cell.start { background: #198754; border-color: #157347; color: #fff; }
+	.rl-cell.goal { background: #e4b944; border-color: #c99d2c; color: #2d2615; }
+	.rl-cell.wall { background: #39443f; border-color: #303a35; color: #fff; }
+	.rl-cell.learned-path { background: #d9f0e8; border-color: #9dcfba; color: #176346; }
+	.legend-swatch { display: inline-block; width: 0.72rem; height: 0.72rem; margin-right: 0.35rem; border: 1px solid #bbc8c1; border-radius: 2px; vertical-align: -0.05rem; }
+	.start-swatch { background: #198754; border-color: #157347; }
+	.goal-swatch { background: #e4b944; border-color: #c99d2c; }
+	.wall-swatch { background: #39443f; border-color: #303a35; }
+	.path-swatch { background: #d9f0e8; border-color: #9dcfba; }
+	.action-token { display: inline-flex; align-items: center; gap: 0.45rem; }
+	.action-arrow { color: #198754; font-size: 1.15rem; font-weight: 800; line-height: 1; }
+	.q-best { background-color: #e5f4ed !important; color: #145c3d; font-weight: 700; }
+	.table > :not(caption) > * > * { border-color: #e0e7e3; padding: 0.7rem 0.85rem; }
+	@media (max-width: 420px) {
+		.rl-grid { grid-template-columns: repeat(4, minmax(48px, 64px)); gap: 6px; }
+		.rl-board-wrap { padding: 0.8rem; }
+	}
+</style>
+{% endblock %}
 </body>
 </html>
 <!-- Submit the training request to the Flask route. -->
