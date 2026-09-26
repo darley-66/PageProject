@@ -1,65 +1,23 @@
 from flask import Flask, render_template, request, jsonify
-from LinearRegression import CalculateGrade, GeneratePlot
-from LogisticRegression import PredictRisk, implementLogisticRegression
+from models.linear_regression import CalculateGrade, GeneratePlot
+from models.logistic_regression import PredictRisk, implementLogisticRegression
+from models.svm_model import (
+    get_breast_cancer_svm_metrics,
+    plot_breast_cancer_dataset,
+    predict_breast_cancer,
+)
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import io, base64
+from pathlib import Path
 
-# Librerías para SVM y métricas
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, r2_score, mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error
 
 app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parent
 
 # ============================
 # Logistic Regression (assets)
 # ============================
 logistic_assets = implementLogisticRegression()
-
-# ============================
-# SVM: Entrenamiento inicial
-# ============================
-data = load_breast_cancer()
-X = data.data
-y = data.target
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-model_svm = SVC(kernel='linear')
-model_svm.fit(X_train, y_train)
-
-# Calcular métricas del modelo SVM
-y_pred = model_svm.predict(X_test)
-metrics_svm = {
-    "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
-    "accuracy": accuracy_score(y_test, y_pred),
-    "precision": precision_score(y_test, y_pred),
-    "recall": recall_score(y_test, y_pred),
-    "f1": f1_score(y_test, y_pred)
-}
-
-# ============================
-# Función para graficar dataset
-# ============================
-def plot_dataset():
-    df = pd.DataFrame(data.data, columns=data.feature_names)
-    df['target'] = data.target
-
-    plt.figure(figsize=(6,4))
-    sns.scatterplot(
-        x=df['mean radius'], y=df['mean texture'],
-        hue=df['target'], palette="coolwarm"
-    )
-    plt.title("Breast Cancer Dataset (Radius vs Texture)")
-    buf = io.BytesIO()
-    plt.savefig(buf, format="png")
-    buf.seek(0)
-    return base64.b64encode(buf.getvalue()).decode("utf-8")
 
 # ============================
 # Home & Information
@@ -85,7 +43,7 @@ def concepts_linear():
 
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
-    data_lin = pd.read_csv("data/Student_Performance.csv")
+    data_lin = pd.read_csv(BASE_DIR / "data" / "Student_Performance.csv")
     records = len(data_lin)
 
     calculateResult = None
@@ -189,7 +147,7 @@ def concepts_svm():
 @app.route("/SVM/", methods=["GET", "POST"])
 def calculate_svm():
     result = None
-    plot_url = plot_dataset()
+    plot_url = plot_breast_cancer_dataset()
 
     if request.method == "POST":
         try:
@@ -197,20 +155,18 @@ def calculate_svm():
             mean_texture = float(request.form.get("mean_texture"))
             mean_perimeter = float(request.form.get("mean_perimeter"))
 
-            input_data = [0]*X.shape[1]
-            input_data[0] = mean_radius
-            input_data[1] = mean_texture
-            input_data[2] = mean_perimeter
-
-            prediction = model_svm.predict([input_data])[0]
-            result = "Malignant" if prediction == 0 else "Benign"
+            result = predict_breast_cancer(
+                mean_radius,
+                mean_texture,
+                mean_perimeter,
+            )
         except:
             result = "Invalid input"
 
     return render_template("temSVMApp.html", 
                            result=result, 
                            plot_url=plot_url,
-                           metrics=metrics_svm)
+                           metrics=get_breast_cancer_svm_metrics())
 
 # ============================
 # Use Cases

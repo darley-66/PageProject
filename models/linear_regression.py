@@ -1,10 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import io, base64
+from pathlib import Path
 from sklearn.linear_model import LinearRegression
 
 # Cargar dataset
-df = pd.read_csv("data/Student_Performance.csv")
+data_path = Path(__file__).resolve().parent.parent / "data" / "Student_Performance.csv"
+df = pd.read_csv(data_path)
 
 # Asegurar tipos numéricos y limpiar
 df["study_hours"] = pd.to_numeric(df["study_hours"], errors="coerce")

@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -6,7 +7,8 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 
 def getData():
     # Dataset German Credit (numeric)
-    df = pd.read_csv('german.data-numeric', sep=r'\s+', header=None)
+    data_path = Path(__file__).resolve().parent.parent / 'data' / 'german.data-numeric'
+    df = pd.read_csv(data_path, sep=r'\s+', header=None)
 
     # Seleccionamos variables relevantes
     X = df[[1, 4, 12]].copy()
