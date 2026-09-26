@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 from models.linear_regression import CalculateGrade, GeneratePlot
 from models.logistic_regression import PredictRisk, implementLogisticRegression
+from flask import Blueprint, render_template
+from Kmeans import KMeans
+
 from models.svm_model import (
     get_breast_cancer_svm_metrics,
     plot_breast_cancer_dataset,
@@ -15,10 +18,18 @@ from models.kmeans_model import (
     run_kmeans,
 )
 import base64
-import pandas as pd
 from pathlib import Path
-
-from sklearn.metrics import r2_score, mean_squared_error
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import io, base64
+from flask import Flask, render_template, request
+from SGDRegression import train, GRID, START, GOAL, ACTION_NAMES
+# Librerías para SVM y métricas
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, r2_score, mean_squared_error
 
 app = Flask(__name__)
 BASE_DIR = Path(__file__).resolve().parent
@@ -243,3 +254,39 @@ def use_case4():
 
 if __name__ == "__main__":
     app.run(debug=True)
+import os
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+    
+app = Flask(__name__)
+@app.route('/SGDRegression', methods=['GET', 'POST'])
+def reinforcement():
+    result = None
+    if request.method == 'POST':
+        result = train(episodes=1000)
+# Pass the result and grid settings to the template.
+    return render_template(
+        'SGDRegression.html',
+        result=result,
+        grid=GRID,
+        start=START,
+        goal=GOAL,
+        actions=ACTION_NAMES,
+    )
+if __name__ == '__main__':
+    app.run()
+
+@app.route("/kmeans-app/")
+def kmeans_app():
+    from Kmeans import implementClustering
+    result_data = implementClustering()
+    
+    return render_template(
+        "kmeans.html", 
+        results=result_data["results"],
+        summary=result_data["summary"],
+        centroids=result_data["centroids"],
+        score=result_data.get("silhouette_score")
+    )
