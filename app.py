@@ -6,6 +6,15 @@ from models.svm_model import (
     plot_breast_cancer_dataset,
     predict_breast_cancer,
 )
+from models.kmeans_model import (
+    get_centroids,
+    get_cluster_summary,
+    get_generated_images,
+    get_variance_comparison,
+    get_assignments,
+    run_kmeans,
+)
+import base64
 import pandas as pd
 from pathlib import Path
 
@@ -167,6 +176,51 @@ def calculate_svm():
                            result=result, 
                            plot_url=plot_url,
                            metrics=get_breast_cancer_svm_metrics())
+
+# ============================
+# K-Means
+# ============================
+@app.route("/kmeans-concepts/")
+def concepts_kmeans():
+    return render_template("conceptsKMeans.html")
+
+
+@app.route("/kmeans-manual/")
+def kmeans_manual():
+    try:
+        get_centroids()
+    except RuntimeError:
+        run_kmeans()
+
+    dataset = pd.read_csv(BASE_DIR / "data" / "ecommerce_customers.csv")
+    images = {
+        name: base64.b64encode(Path(path).read_bytes()).decode("ascii")
+        for name, path in get_generated_images().items()
+    }
+    assignments_by_iteration = get_assignments()["iterations"]
+    assignment_downloads = {
+        iteration: "data:text/csv;base64," + base64.b64encode(
+            assignments.to_csv(index=False).encode("utf-8")
+        ).decode("ascii")
+        for iteration, assignments in assignments_by_iteration.items()
+    }
+
+    centroids = get_centroids()
+    return render_template(
+        "temKMeans.html",
+        dataset_name="ecommerce_customers.csv",
+        dataset_rows=len(dataset),
+        dataset_preview=dataset[
+            ["customer_id", "purchase_frequency", "monthly_spending"]
+        ].head(5).to_dict("records"),
+        initial_centroids=centroids[
+            centroids["stage"] == "Initial"
+        ].to_dict("records"),
+        images=images,
+        variance_rows=get_variance_comparison().to_dict("records"),
+        summary_rows=get_cluster_summary().to_dict("records"),
+        assignment_downloads=assignment_downloads,
+    )
 
 # ============================
 # Use Cases

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}K-Means Manual Exercise{% endblock %}
+{% block content %}
+<section class="py-3">
+  <header class="mb-4">
+    <h1 class="text-primary">K-Means: Manual Exercise</h1>
+    <p class="lead">Ejecución paso a paso sobre el dataset de clientes.</p>
+  </header>
+
+  <section class="mb-5">
+    <h2>Dataset</h2>
+    <p><strong>Archivo:</strong> {{ dataset_name }} · <strong>Registros:</strong> {{ dataset_rows }}</p>
+    <p>
+      El clustering utiliza <code>purchase_frequency</code> y
+      <code>monthly_spending</code>. <code>customer_id</code> identifica cada
+      cliente, pero no participa en el cálculo de distancias.
+    </p>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped">
+        <thead><tr><th>Customer ID</th><th>Purchase frequency</th><th>Monthly spending</th></tr></thead>
+        <tbody>
+          {% for row in dataset_preview %}
+          <tr>
+            <td>{{ row.customer_id }}</td>
+            <td>{{ row.purchase_frequency }}</td>
+            <td>{{ "%.2f"|format(row.monthly_spending) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <h2>Centroides iniciales</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead><tr><th>Cluster</th><th>Purchase frequency</th><th>Monthly spending</th></tr></thead>
+        <tbody>
+          {% for centroid in initial_centroids %}
+          <tr>
+            <td>{{ centroid.centroid }}</td>
+            <td>{{ "%.2f"|format(centroid.purchase_frequency) }}</td>
+            <td>{{ "%.2f"|format(centroid.monthly_spending) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <h2>Inicialización</h2>
+    <p>Clientes del dataset y posición de los tres centroides iniciales.</p>
+    <img class="img-fluid border rounded" src="data:image/png;base64,{{ images.initial }}" alt="Dataset con centroides iniciales">
+  </section>
+
+  <section class="mb-5">
+    <h2>Iteraciones</h2>
+    {% for iteration in [1, 2, 3] %}
+    <figure class="mb-4">
+      <figcaption class="h5">Iteración {{ iteration }}</figcaption>
+      <img class="img-fluid border rounded" src="data:image/png;base64,{{ images['iteration_' ~ iteration] }}" alt="Clusters y centroides de la iteración {{ iteration }}">
+    </figure>
+    {% endfor %}
+  </section>
+
+  <section class="mb-5">
+    <h2>Asignaciones por iteración</h2>
+    <p>Descarga de las tablas generadas durante el ejercicio manual.</p>
+    {% for iteration in [1, 2, 3] %}
+    <a class="btn btn-outline-secondary btn-sm me-2 mb-2"
+       href="{{ assignment_downloads[iteration] }}"
+       download="iteration_{{ iteration }}_assignments.csv">
+      iteration_{{ iteration }}_assignments.csv
+    </a>
+    {% endfor %}
+  </section>
+
+  <section class="mb-5">
+    <h2>Comparación de varianza y SSE</h2>
+    <p>Contenido de <code>variance_by_iteration.csv</code>.</p>
+    <div class="table-responsive">
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr><th>Iteration</th><th>Cluster</th><th>Customers</th><th>Frequency variance</th><th>Spending variance</th><th>SSE</th></tr>
+        </thead>
+        <tbody>
+          {% for row in variance_rows %}
+          <tr>
+            <td>{{ row.iteration }}</td><td>{{ row.cluster }}</td><td>{{ row.customers }}</td>
+            <td>{{ "%.4f"|format(row.frequency_variance) }}</td>
+            <td>{{ "%.4f"|format(row.spending_variance) }}</td>
+            <td>{{ "%.2f"|format(row.SSE) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <h2>Resumen final de clusters</h2>
+    <p>Contenido de <code>cluster_summary.csv</code>.</p>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr><th>Cluster</th><th>Customers</th><th>Average purchase frequency</th><th>Average monthly spending</th></tr>
+        </thead>
+        <tbody>
+          {% for row in summary_rows %}
+          <tr>
+            <td>{{ row.cluster }}</td><td>{{ row.customers }}</td>
+            <td>{{ "%.2f"|format(row.average_purchase_frequency) }}</td>
+            <td>{{ "%.2f"|format(row.average_monthly_spending) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2>Interpretación final</h2>
+    <p>
+      El resultado distingue grupos de clientes con frecuencia y gasto bajos,
+      medios y altos. La tabla final muestra el tamaño y los promedios de cada
+      segmento. Los centroides de las iteraciones 2 y 3 coinciden en este
+      resultado, señal de que no cambiaron entre esas dos iteraciones.
+    </p>
+  </section>
+
+  <a class="btn btn-outline-primary" href="{{ url_for('concepts_kmeans') }}">
+    Volver a K-Means Concepts
+  </a>
+</section>
+{% endblock %}
