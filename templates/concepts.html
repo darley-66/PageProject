@@ -1,133 +1,94 @@
-{% extends "base.html" %} {% block title %}Machine Learning Concepts{% endblock
-%} {% block content %}
+{% extends "base.html" %}
+{% block title %}Machine Learning Foundations{% endblock %}
+{% block content %}
+    <section class="mb-5">
+      <p class="text-uppercase text-success fw-semibold small mb-2">Foundations</p>
+      <h1 class="display-6 fw-bold mb-3">Machine Learning Concepts</h1>
+      <p class="lead text-secondary mb-0">
+        Machine learning uses data to build systems that recognize patterns and make
+        predictions or decisions. Its value depends on the quality of the data, the
+        question being asked, and careful evaluation on examples the model has not seen.
+      </p>
+    </section>
 
-<style>
-  .concepts-container {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
-  }
+    <section class="mb-5" aria-labelledby="learning-types">
+      <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+        <div>
+          <h2 class="h3 mb-1" id="learning-types">Three learning paradigms</h2>
+          <p class="text-secondary mb-0">The learning signal determines what the model can discover.</p>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-12 col-lg-4">
+          <article class="card h-100 border-start border-4 border-primary">
+            <div class="card-body">
+              <h3 class="h5">Supervised learning</h3>
+              <p>Training examples include both input features and a known target. The model learns a mapping from inputs to outputs.</p>
+              <p class="mb-0"><strong>Example:</strong> Estimate a student's final score from study hours and prior results. Regression predicts a number; classification predicts a category.</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-lg-4">
+          <article class="card h-100 border-start border-4 border-success">
+            <div class="card-body">
+              <h3 class="h5">Unsupervised learning</h3>
+              <p>Examples have no supplied target. The algorithm searches for structure, such as groups or lower-dimensional representations.</p>
+              <p class="mb-0"><strong>Example:</strong> Group retail customers by purchase frequency and spending to explore customer segments.</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-lg-4">
+          <article class="card h-100 border-start border-4 border-warning">
+            <div class="card-body">
+              <h3 class="h5">Reinforcement learning</h3>
+              <p>An agent takes actions in an environment and receives rewards or penalties. It learns a policy that aims to maximize cumulative reward.</p>
+              <p class="mb-0"><strong>Example:</strong> A grid-navigation agent learns which moves reach a goal while avoiding obstacles.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-  .concepts-container h1 {
-    font-size: 42px;
-    font-weight: bold;
-    color: #007bff;
-    text-align: center;
-    margin-bottom: 10px;
-  }
+    <section class="mb-5" aria-labelledby="ml-workflow">
+      <h2 class="h3 mb-3" id="ml-workflow">A responsible model workflow</h2>
+      <div class="row g-2 align-items-stretch">
+        <div class="col-12 col-md"><div class="p-3 h-100 bg-white border rounded"><span class="badge text-bg-primary mb-2">1</span><h3 class="h6">Define</h3><p class="small mb-0">Specify the decision, target, and success metric.</p></div></div>
+        <div class="col-12 col-md-auto d-none d-md-flex align-items-center text-secondary"><i class="bi bi-arrow-right" aria-hidden="true"></i></div>
+        <div class="col-12 col-md"><div class="p-3 h-100 bg-white border rounded"><span class="badge text-bg-primary mb-2">2</span><h3 class="h6">Prepare</h3><p class="small mb-0">Inspect, clean, and split representative data.</p></div></div>
+        <div class="col-12 col-md-auto d-none d-md-flex align-items-center text-secondary"><i class="bi bi-arrow-right" aria-hidden="true"></i></div>
+        <div class="col-12 col-md"><div class="p-3 h-100 bg-white border rounded"><span class="badge text-bg-primary mb-2">3</span><h3 class="h6">Train</h3><p class="small mb-0">Fit a model using training data only.</p></div></div>
+        <div class="col-12 col-md-auto d-none d-md-flex align-items-center text-secondary"><i class="bi bi-arrow-right" aria-hidden="true"></i></div>
+        <div class="col-12 col-md"><div class="p-3 h-100 bg-white border rounded"><span class="badge text-bg-primary mb-2">4</span><h3 class="h6">Evaluate</h3><p class="small mb-0">Measure performance on held-out data.</p></div></div>
+        <div class="col-12 col-md-auto d-none d-md-flex align-items-center text-secondary"><i class="bi bi-arrow-right" aria-hidden="true"></i></div>
+        <div class="col-12 col-md"><div class="p-3 h-100 bg-white border rounded"><span class="badge text-bg-primary mb-2">5</span><h3 class="h6">Monitor</h3><p class="small mb-0">Check reliability as data and conditions change.</p></div></div>
+      </div>
+      <p class="small text-secondary mt-2 mb-0">Keep test data separate until the final evaluation. Using it during model selection can produce an overly optimistic estimate.</p>
+    </section>
 
-  .concepts-container p.lead {
-    font-size: 20px;
-    color: #666;
-    text-align: center;
-    margin-bottom: 30px;
-  }
+    <section class="mb-5" aria-labelledby="key-terms">
+      <h2 class="h3 mb-3" id="key-terms">Core vocabulary</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><h3 class="h6">Dataset</h3><p class="mb-0">A collection of observations used for analysis, training, validation, or testing.</p></div></article></div>
+        <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><h3 class="h6">Features</h3><p class="mb-0">Measured input variables supplied to a model, such as study hours or purchase frequency.</p></div></article></div>
+        <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><h3 class="h6">Target</h3><p class="mb-0">The outcome a supervised model learns to predict, such as a score or a spam label.</p></div></article></div>
+        <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><h3 class="h6">Model</h3><p class="mb-0">A parameterized mathematical function fitted to data to support predictions or decisions.</p></div></article></div>
+      </div>
+    </section>
 
-  .concepts-container h2 {
-    font-size: 26px;
-    color: #333;
-    margin-top: 25px;
-    margin-bottom: 15px;
-  }
+    <section class="mb-5" aria-labelledby="evaluation">
+      <h2 class="h3 mb-3" id="evaluation">Evaluation depends on the task</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-4"><article class="card h-100"><div class="card-body"><h3 class="h5">Regression</h3><p class="mb-0">MAE and RMSE express prediction error in target units; R² summarizes variance explained relative to a baseline.</p></div></article></div>
+        <div class="col-12 col-md-4"><article class="card h-100"><div class="card-body"><h3 class="h5">Classification</h3><p class="mb-0">Precision, recall, F1, and a confusion matrix describe different error types. Accuracy alone can mislead when classes are imbalanced.</p></div></article></div>
+        <div class="col-12 col-md-4"><article class="card h-100"><div class="card-body"><h3 class="h5">Clustering</h3><p class="mb-0">Silhouette score compares within-cluster cohesion with separation from neighboring clusters. It does not establish that segments are useful to a business.</p></div></article></div>
+      </div>
+    </section>
 
-  .concepts-container p {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #555;
-    text-align: justify;
-  }
-
-  .concepts-container ul {
-    text-align: left;
-    margin-top: 15px;
-    font-size: 17px;
-    color: #444;
-  }
-
-  .concepts-container li {
-    margin-bottom: 10px;
-  }
-</style>
-
-<div class="concepts-container">
-  <h1>🤖 Machine Learning Concepts</h1>
-  <p class="lead">Basic concepts of Machine Learning</p>
-
-  <h2>Definition</h2>
-  <p>
-    Machine Learning is a branch of Artificial Intelligence that allows
-    computers to learn from data and make predictions or decisions without being
-    explicitly programmed.
-  </p>
-
-  <h2>Core Elements</h2>
-  <ul>
-    <li>
-      📂 <strong>Dataset:</strong> Collection of data used to train, test, and
-      evaluate models.
-    </li>
-    <li>
-      🔑 <strong>Features:</strong> Variables or characteristics used by the
-      model to learn patterns.
-    </li>
-    <li>
-      🧮 <strong>Model:</strong> Mathematical system that learns from data to
-      make predictions.
-    </li>
-    <li>
-      ⚙️ <strong>Training:</strong> Process of feeding data to adjust model
-      parameters.
-    </li>
-    <li>
-      🎯 <strong>Prediction:</strong> Using a trained model to estimate outcomes
-      on new data.
-    </li>
-  </ul>
-
-  <h2>Types of Learning</h2>
-  <ul>
-    <li>
-      📊 <strong>Supervised Learning:</strong> Uses labeled data (known
-      outputs). Examples: regression, classification.
-    </li>
-    <li>
-      🌀 <strong>Unsupervised Learning:</strong> Works with unlabeled data to
-      find patterns (clustering, dimensionality reduction).
-    </li>
-    <li>
-      🏆 <strong>Reinforcement Learning:</strong> Learns by interacting with an
-      environment and receiving rewards or penalties.
-    </li>
-  </ul>
-
-  <h2>Evaluation</h2>
-  <ul>
-    <li>🧪 <strong>Testing:</strong> Evaluates performance on unseen data.</li>
-    <li>📈 <strong>Accuracy:</strong> Percentage of correct predictions.</li>
-    <li>
-      📊 <strong>Other Metrics:</strong> Precision, recall, F1-score, ROC-AUC.
-    </li>
-  </ul>
-
-  <h2>Applications</h2>
-  <ul>
-    <li>🎬 Recommendation systems (Netflix, Spotify).</li>
-    <li>💳 Fraud detection in finance.</li>
-    <li>🏥 Medical diagnosis and imaging.</li>
-    <li>🚗 Autonomous vehicles.</li>
-    <li>🗣️ Natural Language Processing (chatbots, translation).</li>
-  </ul>
-
-  <h2>Why It Matters</h2>
-  <p>
-    Machine Learning powers many modern applications and is the foundation of
-    Artificial Intelligence. Understanding these concepts is essential for
-    exploring advanced models like Deep Learning and Neural Networks.
-  </p>
-</div>
-
+    <section class="mb-4" aria-labelledby="benefits-limits">
+      <h2 class="h3 mb-3" id="benefits-limits">Benefits and limitations</h2>
+      <div class="row g-3">
+        <div class="col-12 col-md-6"><div class="p-4 h-100 bg-white border rounded"><h3 class="h5">What machine learning can offer</h3><ul class="mb-0"><li>Finds complex patterns in large datasets.</li><li>Automates repeatable estimates and classifications.</li><li>Can improve when relevant, representative data becomes available.</li></ul></div></div>
+        <div class="col-12 col-md-6"><div class="p-4 h-100 bg-white border rounded"><h3 class="h5">What requires care</h3><ul class="mb-0"><li>Biased or incomplete data can produce unfair or unreliable outcomes.</li><li>Strong test performance does not guarantee performance after data drift.</li><li>Correlation is not evidence of causation, and some models are difficult to interpret.</li></ul></div></div>
+      </div>
+    </section>
 {% endblock %}

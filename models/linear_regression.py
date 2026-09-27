@@ -26,12 +26,12 @@ def CalculateGrade(hours: float) -> float:
 
 def GeneratePlot(hours: float = None) -> str:
     plt.figure(figsize=(6,4))
-    plt.scatter(X, y, color="blue", alpha=0.5, label="Datos reales")
-    plt.plot(X, model.predict(X), color="red", label="Regresión lineal")
+    plt.scatter(X, y, color="blue", alpha=0.5, label="Observed data")
+    plt.plot(X, model.predict(X), color="red", label="Linear regression")
 
     if hours is not None:
         predicted = CalculateGrade(hours)
-        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Predicción")
+        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Prediction")
 
     plt.xlabel("Study Hours")
     plt.ylabel("Overall Score")

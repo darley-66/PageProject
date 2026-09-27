@@ -109,18 +109,12 @@ endblock %} {% block content %}
   </ul>
 
   <h2>Model Training Steps</h2>
-  <ul>
-    <li>
-      Exploratory Data Analysis (EDA): review distributions and correlations.
-    </li>
-    <li>Verify assumptions.</li>
-    <li>Fit the model: estimate coefficients and odds ratios.</li>
-    <li>
-      Evaluate performance: confusion matrix, ROC-AUC, precision, recall,
-      F1-score.
-    </li>
-    <li>Apply regularization (L1/Lasso, L2/Ridge) to avoid overfitting.</li>
-  </ul>
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">1</span><h3 class="h6">Prepare data</h3><p class="small mb-0">Inspect class balance, encode inputs, and scale numeric features when appropriate.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">2</span><h3 class="h6">Fit coefficients</h3><p class="small mb-0">Use maximum likelihood to estimate coefficients and their effect on log-odds.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">3</span><h3 class="h6">Choose a threshold</h3><p class="small mb-0">Convert probabilities to class labels using a threshold chosen for the task's error costs.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">4</span><h3 class="h6">Evaluate</h3><p class="small mb-0">Review the confusion matrix, precision, recall, F1, and ROC-AUC on held-out data.</p></div></article></div>
+  </div>
 
   <h2>Interpretation</h2>
   <p>
@@ -138,6 +132,13 @@ endblock %} {% block content %}
     <li><strong>Education:</strong> Academic performance prediction.</li>
   </ul>
 
+  <div class="alert alert-info mt-4" role="note">
+    <strong>Credit-scoring example:</strong> Given variables such as credit amount,
+    repayment duration, and age, a model can estimate the probability of default.
+    A chosen threshold turns that probability into a class; the threshold should
+    reflect the consequences of false approvals and false rejections.
+  </div>
+
   <h2>Example</h2>
   <p>
     If a model predicts that a student has P(pass) = 0.85, it means there is an
@@ -152,6 +153,37 @@ endblock %} {% block content %}
     model before moving to more complex algorithms like Support Vector Machines
     or Neural Networks.
   </p>
+
+  <section class="mt-4" aria-labelledby="logistic-tradeoffs">
+    <h2 id="logistic-tradeoffs">Advantages and limitations</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-success">
+          <div class="card-body">
+            <h3 class="h5">Advantages</h3>
+            <ul class="mb-0">
+              <li>Produces probabilities that support threshold-based decisions.</li>
+              <li>Coefficients and odds ratios are relatively interpretable.</li>
+              <li>Efficient to train and useful as a classification baseline.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-warning">
+          <div class="card-body">
+            <h3 class="h5">Limitations</h3>
+            <ul class="mb-0">
+              <li>Assumes a linear relationship between predictors and log-odds.</li>
+              <li>Correlated predictors can make coefficient estimates unstable.</li>
+              <li>Probability calibration and decision thresholds need validation.</li>
+              <li>Imbalanced classes may require weighting or resampling strategies.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
 </div>
 
 {% endblock %}
