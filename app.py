@@ -255,7 +255,7 @@ def use_case4():
 def reinforcement():
     result = None
     if request.method == 'POST':
-        result = train(episodes=1000)
+        result = train(episodes=200)
 # Pass the result and grid settings to the template.
     return render_template(
         'SGDRegression.html',
