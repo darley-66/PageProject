@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}K-Means Concepts{% endblock %}
+{% block content %}
+<section class="py-3">
+  <header class="mb-4">
+    <h1 class="text-primary">Unsupervised Machine Learning: K-Means</h1>
+    <p class="lead">Agrupación de clientes mediante centroides y distancia euclidiana.</p>
+  </header>
+
+  <section class="mb-4">
+    <h2>¿Qué hace K-Means?</h2>
+    <p>
+      K-Means organiza observaciones en K grupos. Cada observación se asigna
+      al centroide más cercano y cada centroide se actualiza como la media
+      de las observaciones de su grupo.
+    </p>
+  </section>
+
+  <section class="mb-4">
+    <h2>Variables del ejercicio</h2>
+    <ul>
+      <li><strong>purchase_frequency:</strong> frecuencia de compra del cliente.</li>
+      <li><strong>monthly_spending:</strong> gasto mensual del cliente, en miles de COP.</li>
+    </ul>
+    <p>
+      Para cada punto, el algoritmo calcula su distancia euclidiana a los
+      tres centroides y lo asigna al más cercano.
+    </p>
+    <p class="font-monospace">
+      d(x, c) = √((purchase_frequencyₓ - purchase_frequency_c)²
+      + (monthly_spendingₓ - monthly_spending_c)²)
+    </p>
+  </section>
+
+  <section class="mb-4">
+    <h2>Procedimiento de este ejercicio</h2>
+    <ol>
+      <li>Se inicia con K = 3 y tres centroides definidos.</li>
+      <li>Se asignan los clientes al centroide más cercano.</li>
+      <li>Se actualizan los centroides calculando la media de cada grupo.</li>
+      <li>Se repite el proceso durante tres iteraciones y se comparan los resultados.</li>
+    </ol>
+  </section>
+
+  <a class="btn btn-primary" href="{{ url_for('kmeans_manual') }}">
+    Ver Manual Exercise
+  </a>
+</section>
+{% endblock %}
