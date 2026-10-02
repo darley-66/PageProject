@@ -37,24 +37,27 @@
 				<span><i class="legend-swatch start-swatch"></i>Start</span>
 				<span><i class="legend-swatch goal-swatch"></i>Goal</span>
 				<span><i class="legend-swatch wall-swatch"></i>Obstacle</span>
+				<span><i class="legend-swatch danger-swatch"></i>Damage zone</span>
 				<span><i class="legend-swatch path-swatch"></i>Learned path</span>
 			</div>
 		</div>
 		<div class="rl-board-wrap">
 			<div class="rl-grid" role="grid" aria-label="Four by four Q-learning environment">
-				{% for row in range(4) %}
-					{% for column in range(4) %}
+				{% for row in range(grid|length) %}
+					{% for column in range(grid[0]|length) %}
 						{% set position = (row, column) %}
 						{% if grid[row][column] == 1 %}
 							<div class="rl-cell wall" role="gridcell" aria-label="Obstacle">#</div>
 						{% elif position == start %}
-							<div class="rl-cell start" role="gridcell" aria-label="Start">S</div>
+							<div class="rl-cell start" role="gridcell" aria-label="Start">A</div>
 						{% elif position == goal %}
-							<div class="rl-cell goal" role="gridcell" aria-label="Goal">G</div>
+							<div class="rl-cell goal" role="gridcell" aria-label="Goal">T</div>
+							{% elif grid[row][column] == 2 %}
+    						<div class="rl-cell danger" role="gridcell" aria-label="Danger zone">D</div>
 						{% elif result and position in result.path %}
 							<div class="rl-cell learned-path" role="gridcell" aria-label="Learned path">•</div>
 						{% else %}
-							<div class="rl-cell normal" role="gridcell" aria-label="Open cell">·</div>
+							<div class="rl-cell normal" role="gridcell" aria-label="Open cell">o</div>
 						{% endif %}
 					{% endfor %}
 				{% endfor %}
@@ -170,23 +173,25 @@
 	.metric-value { color: #173f32; font-size: 1.75rem; font-weight: 700; line-height: 1.1; margin-bottom: 0; }
 	.metric-suffix { color: #718079; font-size: 1rem; font-weight: 500; }
 	.rl-board-wrap { display: flex; justify-content: center; padding: 1.25rem; background: #f1f5f3; border: 1px solid #dfe8e3; border-radius: 8px; }
-	.rl-grid { display: grid; grid-template-columns: repeat(4, minmax(58px, 82px)); gap: 8px; }
+	.rl-grid { display: grid; grid-template-columns: repeat(10, minmax(58px, 82px)); gap: 8px; }
 	.rl-cell { aspect-ratio: 1; display: grid; place-items: center; border: 1px solid #d7e0db; border-radius: 6px; background: #fff; color: #53645e; font-size: 1.35rem; font-weight: 700; }
 	.rl-cell.start { background: #198754; border-color: #157347; color: #fff; }
 	.rl-cell.goal { background: #e4b944; border-color: #c99d2c; color: #2d2615; }
 	.rl-cell.wall { background: #39443f; border-color: #303a35; color: #fff; }
 	.rl-cell.learned-path { background: #d9f0e8; border-color: #9dcfba; color: #176346; }
+	.rl-cell.danger { background: #f8d7da; border-color: #e5a3aa; color: #842029; }
 	.legend-swatch { display: inline-block; width: 0.72rem; height: 0.72rem; margin-right: 0.35rem; border: 1px solid #bbc8c1; border-radius: 2px; vertical-align: -0.05rem; }
 	.start-swatch { background: #198754; border-color: #157347; }
 	.goal-swatch { background: #e4b944; border-color: #c99d2c; }
 	.wall-swatch { background: #39443f; border-color: #303a35; }
 	.path-swatch { background: #d9f0e8; border-color: #9dcfba; }
+	.danger-swatch { background: #f8d7da; border-color: #e5a3aa; }
 	.action-token { display: inline-flex; align-items: center; gap: 0.45rem; }
 	.action-arrow { color: #198754; font-size: 1.15rem; font-weight: 800; line-height: 1; }
 	.q-best { background-color: #e5f4ed !important; color: #145c3d; font-weight: 700; }
 	.table > :not(caption) > * > * { border-color: #e0e7e3; padding: 0.7rem 0.85rem; }
 	@media (max-width: 420px) {
-		.rl-grid { grid-template-columns: repeat(4, minmax(48px, 64px)); gap: 6px; }
+		.rl-grid { grid-template-columns: repeat(var(--col, 10), minmax(48px, 64px)); gap: 6px; }
 		.rl-board-wrap { padding: 0.8rem; }
 	}
 </style>
@@ -199,17 +204,17 @@
 </form>
 <!-- Create one table cell for each grid position. -->
 <table aria-label="Grid">
-{% for row in range(4) %}
+{% for row in range(grid|length) %}
 <tr>
-{% for column in range(4) %}
+{% for column in range(grid[0]|length) %}
 {% set position = (row, column) %}
 <td class="{% if grid[row][column] == 1 %}wall
 {% elif result and position in result.path %}path
 {% endif %}">
-{% if position == start %}S
-{% elif position == goal %}G
+{% if position == start %}A
+{% elif position == goal %}T
 {% elif grid[row][column] == 1 %}#
-{% else %}·{% endif %}
+{% else %}o{% endif %}
 </td>
 {% endfor %}
 </tr>

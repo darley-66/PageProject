@@ -4,13 +4,19 @@ from sklearn.linear_model import SGDRegressor
 
     #create map
 GRID=[
-        [0,0,0,0],
-        [0,1,1,0],
-        [0,0,0,0],
-        [1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,1,2,0,0,2,0],
+        [0,1,0,1,0,0,2,0,0,0],
+        [0,0,1,0,0,1,0,0,2,0],
+        [0,0,1,0,0,0,1,1,1,0],
+        [0,0,0,0,2,0,0,0,0,0],
+        [0,1,0,2,0,1,1,1,1,1],
+        [0,1,0,0,2,0,0,0,0,0],
+        [0,0,1,0,0,0,0,2,2,0],
+        [0,0,0,1,1,0,0,2,0,0],
     ]
 START=(0,0)
-GOAL=(3,3)
+GOAL=(9,9)
 
     #Actions Row and column changes for each action.
 ACTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -34,6 +40,9 @@ def step(state, action):
     # Reaching the goal ends the episode.
      if next_state == GOAL:
         return next_state, 20, True
+     
+     if GRID[row][column] == 2:
+        return next_state, -10, False
 
      return next_state, -1, False
 
