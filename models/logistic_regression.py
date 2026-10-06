@@ -1,7 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 
 def implementLogisticRegression():
     data = pd.read_csv("data/Student_Performance.csv")
@@ -33,10 +39,28 @@ def implementLogisticRegression():
 
     accuracy = accuracy_score(y_test, predictions)
 
+    precision = precision_score(y_test, predictions, zero_division=0)
+    recall = recall_score(y_test, predictions, zero_division=0)
+    f1 = f1_score(y_test, predictions, zero_division=0)
+    matrix = confusion_matrix(y_test, predictions).tolist()
+    coefs = model.coef_[0]
+
     return {
         "model": model,
         "metrics": {
-            "accuracy": accuracy
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "confusion_matrix": matrix,
+            # Claves que la plantilla ya usa; credit_amount se alimenta con
+            # attendance_percentage porque el modelo no tiene esa variable.
+            "intercept": float(model.intercept_[0]),
+            "coefficients": {
+                "duration_months": float(coefs[0]),
+                "credit_amount": float(coefs[1]),
+                "age": float(coefs[2])
+            }
         }
     }
 
