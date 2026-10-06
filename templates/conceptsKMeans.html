@@ -4,27 +4,45 @@
 <section class="py-3">
   <header class="mb-4">
     <h1 class="text-primary">Unsupervised Machine Learning: K-Means</h1>
-    <p class="lead">Agrupación de clientes mediante centroides y distancia euclidiana.</p>
+    <p class="lead">Customer clustering using centroids and Euclidean distance.</p>
   </header>
 
   <section class="mb-4">
-    <h2>¿Qué hace K-Means?</h2>
+    <h2>What does K-Means do?</h2>
     <p>
-      K-Means organiza observaciones en K grupos. Cada observación se asigna
-      al centroide más cercano y cada centroide se actualiza como la media
-      de las observaciones de su grupo.
+      K-Means is an unsupervised algorithm: it groups observations without using
+      a known target label. It assigns each observation to one of K clusters,
+      represented by a centroid (the mean feature vector of the assigned points).
+      The algorithm alternates assignments and centroid updates to reduce the
+      within-cluster sum of squared distances.
     </p>
   </section>
 
   <section class="mb-4">
-    <h2>Variables del ejercicio</h2>
-    <ul>
-      <li><strong>purchase_frequency:</strong> frecuencia de compra del cliente.</li>
-      <li><strong>monthly_spending:</strong> gasto mensual del cliente, en miles de COP.</li>
-    </ul>
+    <h2>Features used in this project</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <article class="card h-100">
+          <div class="card-body">
+            <h3 class="h5">Manual exercise</h3>
+            <p>The exercise uses <code>purchase_frequency</code> and <code>monthly_spending</code> from <code>ecommerce_customers.csv</code>. <code>customer_id</code> identifies a row but is excluded from distance calculations.</p>
+            <p class="small text-secondary mb-0">The two features are measured on different scales, so spending can dominate Euclidean distance unless features are scaled.</p>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-6">
+        <article class="card h-100">
+          <div class="card-body">
+            <h3 class="h5">Clustering application</h3>
+            <p>Online Retail transactions are aggregated by customer into <code>PurchaseFrequency</code>, <code>TotalSpending</code>, and <code>AverageSpending</code>. <code>CustomerID</code> remains an identifier, not a model feature.</p>
+            <p class="small text-secondary mb-0">Spending features use <code>log1p</code> before <code>StandardScaler</code>; displayed centroids are converted back to original units.</p>
+          </div>
+        </article>
+      </div>
+    </div>
     <p>
-      Para cada punto, el algoritmo calcula su distancia euclidiana a los
-      tres centroides y lo asigna al más cercano.
+      In the manual two-feature exercise, each point is assigned to the nearest
+      of three centroids using Euclidean distance:
     </p>
     <p class="font-monospace">
       d(x, c) = √((purchase_frequencyₓ - purchase_frequency_c)²
@@ -33,17 +51,34 @@
   </section>
 
   <section class="mb-4">
-    <h2>Procedimiento de este ejercicio</h2>
-    <ol>
-      <li>Se inicia con K = 3 y tres centroides definidos.</li>
-      <li>Se asignan los clientes al centroide más cercano.</li>
-      <li>Se actualizan los centroides calculando la media de cada grupo.</li>
-      <li>Se repite el proceso durante tres iteraciones y se comparan los resultados.</li>
-    </ol>
+    <h2>How the algorithm proceeds</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">1</span><h3 class="h6">Choose K</h3><p class="small mb-0">Set the number of clusters. This project uses K = 3; K-Means does not choose K automatically.</p></div></article></div>
+      <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">2</span><h3 class="h6">Initialize centers</h3><p class="small mb-0">The manual exercise uses predefined centers; Scikit-Learn initializes with k-means++ by default.</p></div></article></div>
+      <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">3</span><h3 class="h6">Assign and update</h3><p class="small mb-0">Assign each point to its nearest center, then recompute each center as its cluster mean.</p></div></article></div>
+      <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">4</span><h3 class="h6">Repeat and assess</h3><p class="small mb-0">Repeat until convergence or an iteration limit; inspect cluster sizes, centers, and validation metrics.</p></div></article></div>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2>Scaling and centroid interpretation</h2>
+    <p>K-Means relies on distance, so a feature with a larger numeric range can dominate. In the Online Retail application, logarithms reduce the skew of spending values and standardization gives each feature a comparable scale during fitting. A centroid is an average profile in the model's feature space, not necessarily an actual customer.</p>
+    <div class="alert alert-info" role="note">
+      <strong>Silhouette score:</strong> values closer to 1 indicate observations are generally closer to their own cluster than to neighboring clusters. A score is a diagnostic, not proof that the segments are meaningful or actionable.
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2>Examples, advantages, and limitations</h2>
+    <div class="row g-3">
+      <div class="col-12 col-lg-4"><article class="card h-100"><div class="card-body"><h3 class="h5">Where it is used</h3><p class="mb-0">Retailers explore customer segments; analysts group documents or compress image colors. Results depend on the chosen features and distance measure.</p></div></article></div>
+      <div class="col-12 col-lg-4"><article class="card h-100 border-start border-4 border-success"><div class="card-body"><h3 class="h5">Advantages</h3><ul class="mb-0"><li>Simple to implement and explain.</li><li>Scales well to many observations.</li><li>Provides compact cluster summaries through centroids.</li></ul></div></article></div>
+      <div class="col-12 col-lg-4"><article class="card h-100 border-start border-4 border-warning"><div class="card-body"><h3 class="h5">Limitations</h3><ul class="mb-0"><li>Requires K to be selected in advance.</li><li>Sensitive to scaling, initialization, and outliers.</li><li>Works best for compact, roughly spherical clusters.</li><li>Different runs or features can produce different segments.</li></ul></div></article></div>
+    </div>
   </section>
 
   <a class="btn btn-primary" href="{{ url_for('kmeans_manual') }}">
-    Ver Manual Exercise
+    View Manual Exercise
   </a>
 </section>
 {% endblock %}

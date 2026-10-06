@@ -53,9 +53,9 @@ endblock %} {% block content %}
   <h2>Definition</h2>
   <p>
     Logistic Regression is a supervised machine learning algorithm used for
-    classification problems. Instead of predicting a continuous numerical
-    value, it estimates the probability that an observation belongs to a
-    particular class.
+    classification problems. Instead of predicting a continuous numerical value,
+    it estimates the probability that an observation belongs to a particular
+    class.
   </p>
 
   <h2>Objective in This Application</h2>
@@ -69,28 +69,86 @@ endblock %} {% block content %}
   <h2>Dataset</h2>
   <p>
     The application uses the
-    <strong>Student_Performance.csv</strong> dataset. A risk variable is
-    created from the student's overall score. Students with an overall score
-    below 60 are classified as being at risk.
+    <strong>Student_Performance.csv</strong> dataset. A risk variable is created
+    from the student's overall score. Students with an overall score below 60
+    are classified as being at risk.
   </p>
 
   <h2>Variables Used</h2>
   <ul>
-    <li>
-      <strong>Study Hours:</strong> Number of hours used for studying.
-    </li>
+    <li><strong>Study Hours:</strong> Number of hours used for studying.</li>
     <li>
       <strong>Attendance Percentage:</strong> Percentage of classes attended.
     </li>
-    <li>
-      <strong>Age:</strong> Student's age.
-    </li>
-    <li>
-      <strong>Risk:</strong> Target variable used for classification.
-    </li>
+    <li><strong>Age:</strong> Student's age.</li>
+    <li><strong>Risk:</strong> Target variable used for classification.</li>
   </ul>
 
   <h2>How the Model Works</h2>
+
+  <h2>Assumptions</h2>
+  <ul>
+    <li>Observations are independent.</li>
+    <li>The dependent variable is categorical.</li>
+    <li>Linear relationship between predictors and log-odds.</li>
+    <li>No strong multicollinearity among predictors.</li>
+    <li>Sufficient sample size for stability.</li>
+  </ul>
+
+  <h2>Model Training Steps</h2>
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3">
+      <article class="card h-100">
+        <div class="card-body">
+          <span class="badge text-bg-primary mb-2">1</span>
+          <h3 class="h6">Prepare data</h3>
+          <p class="small mb-0">
+            Inspect class balance, encode inputs, and scale numeric features
+            when appropriate.
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <article class="card h-100">
+        <div class="card-body">
+          <span class="badge text-bg-primary mb-2">2</span>
+          <h3 class="h6">Fit coefficients</h3>
+          <p class="small mb-0">
+            Use maximum likelihood to estimate coefficients and their effect on
+            log-odds.
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <article class="card h-100">
+        <div class="card-body">
+          <span class="badge text-bg-primary mb-2">3</span>
+          <h3 class="h6">Choose a threshold</h3>
+          <p class="small mb-0">
+            Convert probabilities to class labels using a threshold chosen for
+            the task's error costs.
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+      <article class="card h-100">
+        <div class="card-body">
+          <span class="badge text-bg-primary mb-2">4</span>
+          <h3 class="h6">Evaluate</h3>
+          <p class="small mb-0">
+            Review the confusion matrix, precision, recall, F1, and ROC-AUC on
+            held-out data.
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <h2>Interpretation</h2>
+
   <p>
     The model receives study hours, attendance percentage, and age as input
     variables. Logistic Regression analyzes these values and calculates the
@@ -98,27 +156,47 @@ endblock %} {% block content %}
   </p>
 
   <h2>Mathematical Foundation</h2>
+
+  <h2>Modern Use Cases</h2>
+  <ul>
+    <li><strong>Medicine:</strong> Disease diagnosis.</li>
+    <li><strong>Finance:</strong> Credit scoring.</li>
+    <li><strong>Marketing:</strong> Customer churn prediction.</li>
+    <li><strong>Cybersecurity:</strong> Spam and fraud detection.</li>
+    <li><strong>Education:</strong> Academic performance prediction.</li>
+  </ul>
+
+  <div class="alert alert-info mt-4" role="note">
+    <strong>Credit-scoring example:</strong> Given variables such as credit
+    amount, repayment duration, and age, a model can estimate the probability of
+    default. A chosen threshold turns that probability into a class; the
+    threshold should reflect the consequences of false approvals and false
+    rejections.
+  </div>
+
+  <h2>Example</h2>
+
   <p>
     Logistic Regression uses the sigmoid function to convert the model output
     into a probability between 0 and 1.
   </p>
 
-  <p style="text-align: center;">
+  <p style="text-align: center">
     <strong>P(Y=1) = 1 / (1 + e<sup>-z</sup>)</strong>
   </p>
 
   <p>
     The value of <strong>z</strong> is calculated from the input variables and
-    their coefficients. A probability closer to 1 indicates a higher
-    probability of belonging to the risk class.
+    their coefficients. A probability closer to 1 indicates a higher probability
+    of belonging to the risk class.
   </p>
 
   <h2>Classification</h2>
   <p>
     The application uses the model prediction to determine whether the student
     is classified as being at risk. If the predicted class is 0, the application
-    considers the student approved or without risk. If the predicted class is
-    1, the student is considered to have default risk.
+    considers the student approved or without risk. If the predicted class is 1,
+    the student is considered to have default risk.
   </p>
 
   <h2>Training Process</h2>
@@ -174,6 +252,52 @@ endblock %} {% block content %}
     used as a baseline classification algorithm before applying more complex
     machine learning models.
   </p>
+
+  <section class="mt-4" aria-labelledby="logistic-tradeoffs">
+    <h2 id="logistic-tradeoffs">Advantages and limitations</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-success">
+          <div class="card-body">
+            <h3 class="h5">Advantages</h3>
+            <ul class="mb-0">
+              <li>
+                Produces probabilities that support threshold-based decisions.
+              </li>
+              <li>
+                Coefficients and odds ratios are relatively interpretable.
+              </li>
+              <li>
+                Efficient to train and useful as a classification baseline.
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-warning">
+          <div class="card-body">
+            <h3 class="h5">Limitations</h3>
+            <ul class="mb-0">
+              <li>
+                Assumes a linear relationship between predictors and log-odds.
+              </li>
+              <li>
+                Correlated predictors can make coefficient estimates unstable.
+              </li>
+              <li>
+                Probability calibration and decision thresholds need validation.
+              </li>
+              <li>
+                Imbalanced classes may require weighting or resampling
+                strategies.
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
 </div>
 
 {% endblock %}

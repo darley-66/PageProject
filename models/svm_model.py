@@ -47,10 +47,10 @@ def GeneratePlot(prediction=None):
     # Marcar la predicción del usuario
     if prediction is not None:
         if prediction == 1:
-            plt.text(1, values[1] + 50, "← Predicción: SPAM",
+            plt.text(1, values[1] + 50, "← Prediction: SPAM",
                      color="green", fontsize=12, ha="center", fontweight="bold")
         else:
-            plt.text(0, values[0] + 50, "← Predicción: HAM",
+            plt.text(0, values[0] + 50, "← Prediction: HAM",
                      color="green", fontsize=12, ha="center", fontweight="bold")
 
     img = io.BytesIO()

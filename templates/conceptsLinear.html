@@ -181,6 +181,48 @@
     to be predicted. Examples include education, economics, business,
     engineering, and data analysis.
   </p>
+
+  <section class="mt-5" aria-labelledby="linear-workflow">
+    <h2 id="linear-workflow">From question to prediction</h2>
+    <p>For the project dataset, the input is study hours and the target is overall score. A prediction describes the fitted trend; it is not a guarantee for an individual student.</p>
+    <div class="row g-3 align-items-stretch">
+      <div class="col-12 col-md-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">1</span><h3 class="h6">Choose variables</h3><p class="small mb-0">Define a measurable predictor, X, and a numeric target, Y.</p></div></article></div>
+      <div class="col-12 col-md-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">2</span><h3 class="h6">Fit the line</h3><p class="small mb-0">Estimate the intercept and slope by minimizing squared residuals.</p></div></article></div>
+      <div class="col-12 col-md-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">3</span><h3 class="h6">Inspect residuals</h3><p class="small mb-0">Look for curvature, unequal spread, influential points, and dependence.</p></div></article></div>
+      <div class="col-12 col-md-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">4</span><h3 class="h6">Test generalization</h3><p class="small mb-0">Evaluate on held-out observations before using the model on new cases.</p></div></article></div>
+    </div>
+  </section>
+
+  <section class="mt-5" aria-labelledby="linear-tradeoffs">
+    <h2 id="linear-tradeoffs">Advantages and limitations</h2>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-success">
+          <div class="card-body">
+            <h3 class="h5">Advantages</h3>
+            <ul class="mb-0">
+              <li>Fast to fit and straightforward to explain.</li>
+              <li>Coefficients show the direction and estimated size of an association.</li>
+              <li>Provides a useful baseline for numeric prediction.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-6">
+        <article class="card h-100 border-start border-4 border-warning">
+          <div class="card-body">
+            <h3 class="h5">Limitations</h3>
+            <ul class="mb-0">
+              <li>A straight-line model can miss nonlinear relationships.</li>
+              <li>Outliers can strongly affect least-squares estimates.</li>
+              <li>Predictions beyond the observed range are extrapolations and may be unreliable.</li>
+              <li>An association between variables does not establish causation.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
 </div>
 
 {% endblock %}

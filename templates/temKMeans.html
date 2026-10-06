@@ -4,16 +4,16 @@
 <section class="py-3">
   <header class="mb-4">
     <h1 class="text-primary">K-Means: Manual Exercise</h1>
-    <p class="lead">Ejecución paso a paso sobre el dataset de clientes.</p>
+    <p class="lead">Step-by-step execution on the customer dataset.</p>
   </header>
 
   <section class="mb-5">
     <h2>Dataset</h2>
-    <p><strong>Archivo:</strong> {{ dataset_name }} · <strong>Registros:</strong> {{ dataset_rows }}</p>
+    <p><strong>File:</strong> {{ dataset_name }} · <strong>Records:</strong> {{ dataset_rows }}</p>
     <p>
-      El clustering utiliza <code>purchase_frequency</code> y
-      <code>monthly_spending</code>. <code>customer_id</code> identifica cada
-      cliente, pero no participa en el cálculo de distancias.
+      Clustering uses <code>purchase_frequency</code> and
+      <code>monthly_spending</code>. <code>customer_id</code> identifies each
+      customer but is not used to calculate distances.
     </p>
     <div class="table-responsive">
       <table class="table table-sm table-striped">
@@ -32,7 +32,7 @@
   </section>
 
   <section class="mb-5">
-    <h2>Centroides iniciales</h2>
+    <h2>Initial centroids</h2>
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead><tr><th>Cluster</th><th>Purchase frequency</th><th>Monthly spending</th></tr></thead>
@@ -50,24 +50,24 @@
   </section>
 
   <section class="mb-5">
-    <h2>Inicialización</h2>
-    <p>Clientes del dataset y posición de los tres centroides iniciales.</p>
-    <img class="img-fluid border rounded" src="data:image/png;base64,{{ images.initial }}" alt="Dataset con centroides iniciales">
+    <h2>Initialization</h2>
+    <p>Customers in the dataset and the positions of the three initial centroids.</p>
+    <img class="img-fluid border rounded" src="data:image/png;base64,{{ images.initial }}" alt="Dataset with initial centroids">
   </section>
 
   <section class="mb-5">
-    <h2>Iteraciones</h2>
+    <h2>Iterations</h2>
     {% for iteration in [1, 2, 3] %}
     <figure class="mb-4">
-      <figcaption class="h5">Iteración {{ iteration }}</figcaption>
-      <img class="img-fluid border rounded" src="data:image/png;base64,{{ images['iteration_' ~ iteration] }}" alt="Clusters y centroides de la iteración {{ iteration }}">
+      <figcaption class="h5">Iteration {{ iteration }}</figcaption>
+      <img class="img-fluid border rounded" src="data:image/png;base64,{{ images['iteration_' ~ iteration] }}" alt="Clusters and centroids for iteration {{ iteration }}">
     </figure>
     {% endfor %}
   </section>
 
   <section class="mb-5">
-    <h2>Asignaciones por iteración</h2>
-    <p>Descarga de las tablas generadas durante el ejercicio manual.</p>
+    <h2>Assignments by iteration</h2>
+    <p>Download the tables generated during the manual exercise.</p>
     {% for iteration in [1, 2, 3] %}
     <a class="btn btn-outline-secondary btn-sm me-2 mb-2"
        href="{{ assignment_downloads[iteration] }}"
@@ -78,8 +78,8 @@
   </section>
 
   <section class="mb-5">
-    <h2>Comparación de varianza y SSE</h2>
-    <p>Contenido de <code>variance_by_iteration.csv</code>.</p>
+    <h2>Variance and SSE comparison</h2>
+    <p>Contents of <code>variance_by_iteration.csv</code>.</p>
     <div class="table-responsive">
       <table class="table table-sm table-striped">
         <thead>
@@ -100,8 +100,8 @@
   </section>
 
   <section class="mb-5">
-    <h2>Resumen final de clusters</h2>
-    <p>Contenido de <code>cluster_summary.csv</code>.</p>
+    <h2>Final cluster summary</h2>
+    <p>Contents of <code>cluster_summary.csv</code>.</p>
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
@@ -121,17 +121,17 @@
   </section>
 
   <section class="mb-4">
-    <h2>Interpretación final</h2>
+    <h2>Final interpretation</h2>
     <p>
-      El resultado distingue grupos de clientes con frecuencia y gasto bajos,
-      medios y altos. La tabla final muestra el tamaño y los promedios de cada
-      segmento. Los centroides de las iteraciones 2 y 3 coinciden en este
-      resultado, señal de que no cambiaron entre esas dos iteraciones.
+      The results distinguish customer groups with low, medium, and high purchase
+      frequency and spending. The final table shows the size and averages of each
+      segment. The centroids for iterations 2 and 3 are identical, indicating
+      that they did not change between those iterations.
     </p>
   </section>
 
   <a class="btn btn-outline-primary" href="{{ url_for('concepts_kmeans') }}">
-    Volver a K-Means Concepts
+    Back to K-Means Concepts
   </a>
 </section>
 {% endblock %}

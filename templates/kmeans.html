@@ -27,7 +27,7 @@
     {% if displayed_score is not none %}
     <div class="alert alert-info shadow-sm" role="alert">
         <h4 class="alert-heading">Model Evaluation</h4>
-        <p class="mb-0"><strong>Silhouette Score:</strong> {{ "%.4f"|format(displayed_score) }} (Mide qué tan bien definidos y separados están los clústeres).</p>
+        <p class="mb-0"><strong>Silhouette Score:</strong> {{ "%.4f"|format(displayed_score) }} (Indicates how well-defined and separated the clusters are.)</p>
     </div>
     {% endif %}
 

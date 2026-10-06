@@ -57,6 +57,13 @@ endblock %} {% block content %}
     boundary that separates different classes while maximizing the distance
     between the boundary and the closest data points.
   </p>
+  <p>
+    The margin is the distance from the decision boundary to the nearest
+    training examples. Those nearest examples are the <em>support vectors</em>;
+    moving other, distant observations often has little effect on the boundary.
+    For regression, the related Support Vector Regression method fits a function
+    while tolerating errors inside a chosen margin or epsilon tube.
+  </p>
 
   <h2>Objective in This Application</h2>
   <p>
@@ -86,7 +93,18 @@ endblock %} {% block content %}
     </li>
   </ul>
 
+
   <h2>How SVM Works</h2>
+  <h2>Training workflow</h2>
+  <p>Feature scale matters because the margin and many kernels depend on distances. Fit scaling parameters on the training split, then reuse them unchanged on validation and test data.</p>
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">1</span><h3 class="h6">Prepare features</h3><p class="small mb-0">Encode inputs and standardize numeric variables using training data.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">2</span><h3 class="h6">Choose a kernel</h3><p class="small mb-0">Start with a linear boundary or compare it with an RBF or polynomial kernel.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">3</span><h3 class="h6">Fit and tune</h3><p class="small mb-0">Select C and, for RBF, γ with validation or cross-validation.</p></div></article></div>
+    <div class="col-12 col-md-6 col-xl-3"><article class="card h-100"><div class="card-body"><span class="badge text-bg-primary mb-2">4</span><h3 class="h6">Evaluate</h3><p class="small mb-0">Measure relevant errors on held-out data and inspect class-specific results.</p></div></article></div>
+  </div>
+
+  <h2>Soft Margin SVM</h2>
   <p>
     SVM searches for a decision boundary that separates the observations from
     the different classes. The closest observations to this boundary are
@@ -132,6 +150,7 @@ endblock %} {% block content %}
     metrics.
   </p>
 
+
   <ul>
     <li>
       <strong>Accuracy:</strong> Percentage of correct predictions.
@@ -152,6 +171,33 @@ endblock %} {% block content %}
       <strong>Confusion Matrix:</strong> Shows the correct and incorrect
       classifications made by the model.
     </li>
+
+  <div class="row g-3 mt-1">
+    <div class="col-12 col-md-6">
+      <article class="card h-100">
+        <div class="card-body">
+          <h3 class="h5">What C controls</h3>
+          <p class="mb-0">A larger C penalizes training errors more strongly and can produce a narrower, more complex boundary. A smaller C permits more violations in exchange for a wider margin.</p>
+        </div>
+      </article>
+    </div>
+    <div class="col-12 col-md-6">
+      <article class="card h-100">
+        <div class="card-body">
+          <h3 class="h5">What γ controls in an RBF kernel</h3>
+          <p class="mb-0">A larger γ makes each training point influence a smaller region, which can create a more detailed boundary. A smaller γ produces smoother, broader influence.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <h2>Applications</h2>
+  <ul>
+    <li><strong>Email filtering:</strong> classify a message as spam or legitimate using text features.</li>
+    <li><strong>Medical decision support:</strong> separate cases by measured features to help prioritize review; a model is not a diagnosis.</li>
+    <li><strong>Image recognition:</strong> classify feature representations when a suitable kernel and training set are available.</li>
+    <li><strong>Fraud screening:</strong> flag transactions for further investigation while monitoring false alarms and missed cases.</li>
+
   </ul>
 
   <h2>Visualization</h2>
