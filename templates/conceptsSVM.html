@@ -17,53 +17,45 @@ endblock %} {% block content %}
     font-weight: bold;
     color: #007bff;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .concepts-container h2 {
-    font-size: 26px;
+    font-size: 28px;
     color: #333;
-    margin-top: 25px;
+    margin-top: 30px;
     margin-bottom: 15px;
   }
 
-  .concepts-container p,
-  .concepts-container ul {
+  .concepts-container p {
     font-size: 18px;
     line-height: 1.6;
     color: #555;
     text-align: justify;
   }
 
-  .concepts-container ul {
+  .concepts-container ul,
+  .concepts-container ol {
+    text-align: left;
     margin-top: 15px;
+    font-size: 17px;
+    color: #444;
   }
 
   .concepts-container li {
     margin-bottom: 10px;
   }
-
-  .formula {
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 6px;
-    font-family: monospace;
-    font-size: 16px;
-    margin: 10px 0;
-    display: block;
-  }
 </style>
 
 <div class="concepts-container">
   <h1>⚖️ Support Vector Machine (SVM)</h1>
-  <p class="lead text-center">Concepts, mathematics, and fundamentals of SVM</p>
 
   <h2>Definition</h2>
   <p>
-    Support Vector Machines (SVM) are supervised learning models used for
-    <strong>classification</strong> and <strong>regression</strong>. Their main
-    goal is to find the <em>optimal hyperplane</em> that separates data points
-    of different classes with the <strong>maximum margin</strong>.
+    Support Vector Machine (SVM) is a supervised machine learning algorithm
+    used mainly for classification. Its objective is to find a decision
+    boundary that separates different classes while maximizing the distance
+    between the boundary and the closest data points.
   </p>
   <p>
     The margin is the distance from the decision boundary to the nearest
@@ -73,56 +65,36 @@ endblock %} {% block content %}
     while tolerating errors inside a chosen margin or epsilon tube.
   </p>
 
-  <h2>Mathematical Formulation</h2>
+  <h2>Objective in This Application</h2>
   <p>
-    Suppose we have a dataset with points
-    <span class="formula">(xᵢ, yᵢ)</span>, where
-    <span class="formula">xᵢ ∈ ℝⁿ</span> are the features and
-    <span class="formula">yᵢ ∈ {+1, -1}</span> are the class labels.
+    In this application, SVM is used to classify breast cancer tumors into two
+    categories: malignant or benign. The model uses measurements from the
+    Breast Cancer Wisconsin dataset available through Scikit-learn.
   </p>
-  <p>
-    The hyperplane is defined as:
-    <span class="formula">w · x + b = 0</span>
-  </p>
-  <p>
-    The classification rule is:
-    <span class="formula">f(x) = sign(w · x + b)</span>
-  </p>
-  <p>To maximize the margin, SVM solves the following optimization problem:</p>
-  <span class="formula">
-    Minimize: (1/2) ||w||² <br />
-    Subject to: yᵢ (w · xᵢ + b) ≥ 1, ∀ i
-  </span>
 
-  <h2>Key Ideas</h2>
+  <h2>Dataset</h2>
+  <p>
+    The application uses the Breast Cancer Wisconsin dataset provided by
+    <strong>Scikit-learn</strong>. The dataset contains measurements obtained
+    from breast cancer samples and a target variable indicating whether the
+    tumor is malignant or benign.
+  </p>
+
+  <h2>Variables Used in the Application</h2>
+  <p>
+    The application receives three measurements from the user:
+  </p>
+
   <ul>
+    <li><strong>Mean Radius:</strong> Average radius of the tumor cells.</li>
+    <li><strong>Mean Texture:</strong> Average texture measurement.</li>
     <li>
-      📐 <strong>Hyperplane:</strong> The decision boundary separating classes.
-      In 2D it is a line, in 3D a plane, and in higher dimensions a hyperplane.
-    </li>
-    <li>
-      🔑 <strong>Support Vectors:</strong> The critical data points closest to
-      the hyperplane. They define the margin and are the most important for the
-      model.
-    </li>
-    <li>
-      ⚙️ <strong>Kernel Trick:</strong> Technique that allows SVM to classify
-      data that is not linearly separable by mapping it into a
-      higher-dimensional space. Examples:
-      <ul>
-        <li>Linear Kernel: <span class="formula">K(x, z) = x · z</span></li>
-        <li>
-          Polynomial Kernel:
-          <span class="formula">K(x, z) = (x · z + 1)^d</span>
-        </li>
-        <li>
-          Radial Basis Function (RBF):
-          <span class="formula">K(x, z) = exp(-γ ||x - z||²)</span>
-        </li>
-      </ul>
+      <strong>Mean Perimeter:</strong> Average perimeter measurement.
     </li>
   </ul>
 
+
+  <h2>How SVM Works</h2>
   <h2>Training workflow</h2>
   <p>Feature scale matters because the margin and many kernels depend on distances. Fit scaling parameters on the training split, then reuse them unchanged on validation and test data.</p>
   <div class="row g-3">
@@ -134,18 +106,71 @@ endblock %} {% block content %}
 
   <h2>Soft Margin SVM</h2>
   <p>
-    In real-world problems, perfect separation is not always possible. SVM
-    introduces slack variables ξᵢ to allow misclassifications:
+    SVM searches for a decision boundary that separates the observations from
+    the different classes. The closest observations to this boundary are
+    called support vectors and help determine the position of the boundary.
   </p>
-  <span class="formula">
-    Minimize: (1/2) ||w||² + C Σ ξᵢ <br />
-    Subject to: yᵢ (w · xᵢ + b) ≥ 1 - ξᵢ, ξᵢ ≥ 0
-  </span>
+
+  <h2>Kernel Used</h2>
   <p>
-    Here, <strong>C</strong> is a regularization parameter that controls the
-    trade-off between maximizing the margin and minimizing classification
-    errors.
+    The SVM model implemented in this application uses a
+    <strong>linear kernel</strong>.
   </p>
+
+  <p style="text-align: center;">
+    <strong>w · x + b = 0</strong>
+  </p>
+
+  <p>
+    A linear kernel is appropriate when the model uses a linear decision
+    boundary to separate the classes.
+  </p>
+
+  <h2>Training Process</h2>
+  <ol>
+    <li>The Breast Cancer dataset is loaded from Scikit-learn.</li>
+    <li>The dataset is divided into training and testing data.</li>
+    <li>A linear SVM model is created.</li>
+    <li>The model is trained using the training data.</li>
+    <li>The model makes predictions using the test data.</li>
+    <li>The predictions are evaluated using classification metrics.</li>
+  </ol>
+
+  <h2>Classification</h2>
+  <p>
+    The model produces one of two possible classes. In the application,
+    prediction <strong>0</strong> is displayed as
+    <strong>Malignant</strong>, while prediction <strong>1</strong> is
+    displayed as <strong>Benign</strong>.
+  </p>
+
+  <h2>Model Evaluation</h2>
+  <p>
+    The application evaluates the SVM model using several classification
+    metrics.
+  </p>
+
+
+  <ul>
+    <li>
+      <strong>Accuracy:</strong> Percentage of correct predictions.
+    </li>
+    <li>
+      <strong>Precision:</strong> Measures how many predicted positive cases
+      are actually positive.
+    </li>
+    <li>
+      <strong>Recall:</strong> Measures how many actual positive cases are
+      correctly identified.
+    </li>
+    <li>
+      <strong>F1 Score:</strong> Combines precision and recall into a single
+      measure.
+    </li>
+    <li>
+      <strong>Confusion Matrix:</strong> Shows the correct and incorrect
+      classifications made by the model.
+    </li>
 
   <div class="row g-3 mt-1">
     <div class="col-12 col-md-6">
@@ -172,25 +197,40 @@ endblock %} {% block content %}
     <li><strong>Medical decision support:</strong> separate cases by measured features to help prioritize review; a model is not a diagnosis.</li>
     <li><strong>Image recognition:</strong> classify feature representations when a suitable kernel and training set are available.</li>
     <li><strong>Fraud screening:</strong> flag transactions for further investigation while monitoring false alarms and missed cases.</li>
+
   </ul>
+
+  <h2>Visualization</h2>
+  <p>
+    The application generates a scatter plot using mean radius and mean
+    texture. The points are separated according to their target class,
+    providing a visual representation of the dataset.
+  </p>
 
   <h2>Advantages</h2>
   <ul>
-    <li>Works well with high-dimensional data</li>
-    <li>
-      Effective when the number of features is greater than the number of
-      samples
-    </li>
-    <li>Robust against overfitting, especially with proper kernel choice</li>
+    <li>Works well for classification problems.</li>
+    <li>Can work effectively with datasets containing many features.</li>
+    <li>Provides a clear decision boundary between classes.</li>
   </ul>
 
   <h2>Limitations</h2>
   <ul>
-    <li>Training can be slow for very large datasets</li>
-    <li>Choice of kernel and parameters (C, γ) is critical</li>
-    <li>
-      Less interpretable compared to simpler models like Logistic Regression
-    </li>
+    <li>The model can require appropriate parameter selection.</li>
+    <li>Results can be affected by the scale of the input variables.</li>
+    <li>The interpretation of the decision boundary can be difficult with many dimensions.</li>
+  </ul>
+
+  <h2>Technologies Used</h2>
+  <ul>
+    <li>Python</li>
+    <li>Flask</li>
+    <li>Scikit-learn</li>
+    <li>Pandas</li>
+    <li>Matplotlib</li>
+    <li>Seaborn</li>
+    <li>HTML and Jinja Templates</li>
+    <li>Bootstrap</li>
   </ul>
 </div>
 

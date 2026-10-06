@@ -19,6 +19,10 @@
 
 <div class="container my-5">
     <h2 class="text-center mb-4">E-Commerce Customer Segmentation (K-Means)</h2>
+    <p class="text-center text-secondary">
+        Showing the first {{ results|length }} of {{ customer_count }} customers.
+        Cluster metrics and the visualization use the complete dataset.
+    </p>
 
     {% if displayed_score is not none %}
     <div class="alert alert-info shadow-sm" role="alert">

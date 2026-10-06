@@ -4,13 +4,19 @@ from sklearn.linear_model import SGDRegressor
 
     #create map
 GRID=[
-        [0,0,0,0],
-        [0,1,1,0],
-        [0,0,0,0],
-        [1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,1,2,0,0,2,0],
+        [0,1,0,1,0,0,2,0,0,0],
+        [0,0,1,0,0,1,0,0,2,0],
+        [0,0,1,0,0,0,1,1,1,0],
+        [0,0,0,0,2,0,0,0,0,0],
+        [0,1,0,2,0,1,1,1,1,1],
+        [0,1,0,0,2,0,0,0,0,0],
+        [0,0,1,0,0,0,0,2,2,0],
+        [0,0,0,1,1,0,0,2,0,0],
     ]
 START=(0,0)
-GOAL=(3,3)
+GOAL=(9,9)
 
     #Actions Row and column changes for each action.
 ACTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -34,6 +40,9 @@ def step(state, action):
     # Reaching the goal ends the episode.
      if next_state == GOAL:
         return next_state, 20, True
+     
+     if GRID[row][column] == 2:
+        return next_state, -10, False
 
      return next_state, -1, False
 
@@ -50,6 +59,21 @@ def predict_q_values(model, state):
     for action in range(NUMBER_OF_ACTIONS)
     ])
     return model.predict(features)
+
+
+def get_cell_type(state, action):
+    row = state[0] + ACTIONS[action][0]
+    column = state[1] + ACTIONS[action][1]
+    if not (0 <= row < ROWS and 0 <= column < COLUMNS):
+        return "Wall"
+    if GRID[row][column] == 1:
+        return "Wall"
+    if (row, column) == GOAL:
+        return "Goal"
+    if GRID[row][column] == 2:
+        return "Danger Zone"
+    return "Path"
+
 
 def train(episodes=1000):
     if episodes < 1:
@@ -120,6 +144,7 @@ def train(episodes=1000):
         "number": number, "state": state,
         "action": ACTION_NAMES[action],
         "next_state": next_state, "reward": reward,
+        "cell_type": get_cell_type(state, action),
     })
 
         path.append(next_state)
@@ -127,6 +152,7 @@ def train(episodes=1000):
         if terminated:
             break
     reached_goal = state == GOAL
+    final_evaluation_reward = sum(step_info["reward"] for step_info in steps)
 
     # Build a display table from model predictions.
     q_table = []
@@ -142,15 +168,18 @@ def train(episodes=1000):
     return {
         "episodes": episodes,
         "successes": successes,
+        "success_percentage": round(successes / episodes * 100, 2),
         "final_average": round(
             sum(rewards[-100:]) / len(rewards[-100:]), 2
         ),
+        "final_epsilon": epsilon,
         "reached_goal": reached_goal,
+        "final_evaluation_reward": final_evaluation_reward,
+        "number_of_movements": len(steps),
         "path": path,
         "steps": steps,
         "q_table": q_table,
     }
-
 
 
 

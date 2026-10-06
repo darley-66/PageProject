@@ -1,46 +1,81 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import io, base64
-from pathlib import Path
+import io
+import base64
 from sklearn.linear_model import LinearRegression
 
-# Cargar dataset
-data_path = Path(__file__).resolve().parent.parent / "data" / "Student_Performance.csv"
-df = pd.read_csv(data_path)
 
-# Asegurar tipos numéricos y limpiar
-df["study_hours"] = pd.to_numeric(df["study_hours"], errors="coerce")
-df["overall_score"] = pd.to_numeric(df["overall_score"], errors="coerce")
-df = df.dropna(subset=["study_hours", "overall_score"])
+def train_model():
+    data = pd.read_csv("data/Student_Performance.csv")
 
-# Variables
-X = df[["study_hours"]]
-y = df["overall_score"]
+    X = data["study_hours"].values.reshape(-1, 1)
+    y = data["overall_score"].values
 
-# Entrenar modelo
-model = LinearRegression()
-model.fit(X, y)
+    model = LinearRegression()
+    model.fit(X, y)
 
-def CalculateGrade(hours: float) -> float:
-    return float(model.predict([[hours]])[0])
+    return model
+
+
+model = train_model()
+
+
+def CalculateGrade(hours):
+    prediction = model.predict([[hours]])[0]
+    return round(prediction, 2)
+
 
 def GeneratePlot(hours: float = None) -> str:
-    plt.figure(figsize=(6,4))
-    plt.scatter(X, y, color="blue", alpha=0.5, label="Observed data")
-    plt.plot(X, model.predict(X), color="red", label="Linear regression")
+    data = pd.read_csv("data/Student_Performance.csv")
+
+    X = data["study_hours"].values.reshape(-1, 1)
+    y = data["overall_score"].values
+
+    plt.figure(figsize=(6, 4))
+    plt.scatter(
+        X,
+        y,
+        color="blue",
+        alpha=0.5,
+        label="Observed Data"
+    )
+
+    plt.plot(
+        X,
+        model.predict(X),
+        color="red",
+        label="Linear Regression"
+    )
 
     if hours is not None:
         predicted = CalculateGrade(hours)
-        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Prediction")
+
+        plt.scatter(
+            [hours],
+            [predicted],
+            color="green",
+            s=100,
+            marker="x",
+            label="Prediction"
+        )
 
     plt.xlabel("Study Hours")
     plt.ylabel("Overall Score")
-    plt.title("Linear Regression - Study Hours vs Overall Score")
+    plt.title("Linear Regression - Student Performance")
     plt.legend()
 
-    img = io.BytesIO()
-    plt.savefig(img, format="png")
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode("utf8")
+    buf = io.BytesIO()
+
+    plt.savefig(
+        buf,
+        format="png",
+        bbox_inches="tight"
+    )
+
     plt.close()
-    return f"data:image/png;base64,{plot_url}"
+
+    buf.seek(0)
+
+    return base64.b64encode(
+        buf.getvalue()
+    ).decode("utf-8")

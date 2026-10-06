@@ -48,159 +48,138 @@
 </style>
 
 <div class="concepts-container">
-  <h1>📈 Linear Regression Concepts</h1>
+  <h1>📈 Linear Regression</h1>
 
   <h2>Definition</h2>
   <p>
-    Linear Regression is a supervised learning algorithm used to model the
-    relationship between one or more independent variables (X) and a dependent
-    variable (Y). It assumes that the relationship can be represented by a
-    straight line, making it one of the simplest and most widely used predictive
-    models.
+    Linear Regression is a supervised machine learning algorithm used to
+    predict a continuous numerical value based on one or more input variables.
+    In this application, Linear Regression is used to estimate a student's
+    overall score based on the number of study hours.
   </p>
 
-  <h2>Historical Background</h2>
+  <h2>Objective in This Application</h2>
   <p>
-    Linear regression has its roots in statistics and mathematics. The method of
-    least squares was introduced by Carl Friedrich Gauss and Adrien-Marie
-    Legendre in the early 19th century. Since then, it has become a fundamental
-    tool in data analysis, economics, engineering, and machine learning.
+    The objective is to analyze the relationship between study hours and
+    students' overall scores. The model learns this relationship from the
+    Student Performance dataset and uses it to estimate the expected score
+    when a user enters a number of study hours.
   </p>
 
-  <h2>Problems It Solves</h2>
+  <h2>Dataset</h2>
   <p>
-    Linear Regression is mainly used for prediction and trend analysis. Examples
-    include:
+    The application uses the Student Performance dataset stored in
+    <strong>Student_Performance.csv</strong>. The dataset contains
+    <strong>25,000 records</strong> with information about students and their
+    academic performance.
   </p>
-  <ul>
-    <li>Predicting grades based on study hours.</li>
-    <li>Estimating house prices based on size and location.</li>
-    <li>Forecasting sales based on advertising investment.</li>
-    <li>Analyzing the relationship between income and expenditure.</li>
-  </ul>
 
-  <h2>Variables</h2>
+  <h2>Variables Used</h2>
   <ul>
     <li>
-      <strong>Independent Variable (X):</strong> The input used to make
-      predictions (e.g., study hours).
+      <strong>Independent Variable (X):</strong> Study Hours
     </li>
     <li>
-      <strong>Dependent Variable (Y):</strong> The output we want to predict
-      (e.g., grade).
+      <strong>Dependent Variable (Y):</strong> Overall Score
     </li>
   </ul>
+
+  <h2>How the Model Works</h2>
+  <p>
+    The application reads the study hours and overall score from the dataset.
+    These values are used to train a Linear Regression model. The model finds
+    the line that best represents the relationship between study hours and
+    overall score.
+  </p>
 
   <h2>Mathematical Foundation</h2>
   <p>
-    The regression line is represented by the equation:
-    <em>Y = a + bX</em>, where:
-  </p>
-  <ul>
-    <li><strong>a:</strong> Intercept (value of Y when X = 0).</li>
-    <li>
-      <strong>b:</strong> Slope (how much Y changes when X increases by 1).
-    </li>
-  </ul>
-  <p>
-    In multiple linear regression, the formula extends to:
-    <em>Y = β₀ + β₁X₁ + β₂X₂ + ... + βₙXₙ</em>.
-  </p>
-  <p>
-    Coefficients are estimated using the <strong>least squares method</strong>,
-    which minimizes the sum of squared differences between predicted and actual
-    values.
+    The basic Linear Regression equation is:
   </p>
 
-  <h2>Assumptions</h2>
+  <p style="text-align: center;">
+    <strong>Y = a + bX</strong>
+  </p>
+
   <ul>
-    <li>
-      Linearity: The relationship between predictors and outcome is linear.
-    </li>
-    <li>Independence: Observations are independent of each other.</li>
-    <li>Homoscedasticity: Constant variance of errors across values of X.</li>
-    <li>Normality: Residuals are normally distributed.</li>
-    <li>
-      No multicollinearity: Predictors are not highly correlated with each
-      other.
-    </li>
+    <li><strong>Y:</strong> Predicted overall score.</li>
+    <li><strong>X:</strong> Number of study hours.</li>
+    <li><strong>a:</strong> Intercept of the regression line.</li>
+    <li><strong>b:</strong> Slope of the regression line.</li>
   </ul>
 
   <h2>Training Process</h2>
   <ol>
     <li>
-      <strong>Data Exploration:</strong> Visualize scatter plots to check
-      linearity.
+      The application loads the Student Performance dataset.
     </li>
     <li>
-      <strong>Model Fitting:</strong> Estimate coefficients using least squares.
+      The study hours column is selected as the input variable.
     </li>
     <li>
-      <strong>Evaluation:</strong> Use metrics like R², Mean Squared Error
-      (MSE), and Root Mean Squared Error (RMSE).
+      The overall score column is selected as the target variable.
     </li>
     <li>
-      <strong>Validation:</strong> Apply train/test split or cross-validation to
-      check generalization.
+      A Linear Regression model is trained using these variables.
+    </li>
+    <li>
+      The trained model is used to predict the overall score.
     </li>
   </ol>
 
-  <h2>Interpretation of Coefficients</h2>
+  <h2>Prediction</h2>
   <p>
-    The slope (b) indicates how much the dependent variable changes for each
-    unit increase in the independent variable. The intercept (a) represents the
-    baseline value of Y when X = 0.
-  </p>
-  <p>
-    For example, if the slope is 5, each additional study hour increases the
-    predicted grade by 5 points.
+    The application allows the user to enter the number of hours studied.
+    After submitting the value, the trained model calculates an estimated
+    overall score.
   </p>
 
-  <h2>Evaluation Metrics</h2>
+  <p>
+    For example, when entering <strong>5 study hours</strong>, the application
+    currently estimates an overall score of approximately
+    <strong>69.91</strong>.
+  </p>
+
+  <h2>Regression Plot</h2>
+  <p>
+    The application generates a graph containing the real data points and the
+    regression line calculated by the model. When a prediction is made, the
+    predicted value is also displayed on the graph.
+  </p>
+
+  <h2>Model Evaluation</h2>
+  <p>
+    The application displays two evaluation metrics: R² and Mean Squared Error
+    (MSE).
+  </p>
+
   <ul>
     <li>
-      <strong>R² (Coefficient of Determination):</strong> Measures how well the
-      regression line fits the data.
+      <strong>R²:</strong> Indicates how well the model explains the variation
+      in the target values.
     </li>
     <li>
-      <strong>MSE (Mean Squared Error):</strong> Average of squared differences
-      between predicted and actual values.
-    </li>
-    <li>
-      <strong>RMSE (Root Mean Squared Error):</strong> Square root of MSE,
-      interpretable in the same units as Y.
+      <strong>MSE:</strong> Measures the average squared difference between
+      predicted and actual values.
     </li>
   </ul>
 
-  <h2>Real-World Use Cases</h2>
+  <h2>Technologies Used</h2>
   <ul>
-    <li>
-      <strong>Economics:</strong> Modeling the relationship between GDP and
-      investment.
-    </li>
-    <li>
-      <strong>Business:</strong> Forecasting sales based on marketing spend.
-    </li>
-    <li>
-      <strong>Education:</strong> Predicting student performance based on study
-      habits.
-    </li>
-    <li>
-      <strong>Engineering:</strong> Estimating material strength based on
-      composition.
-    </li>
-    <li>
-      <strong>Healthcare:</strong> Predicting patient recovery time based on
-      treatment hours.
-    </li>
+    <li>Python</li>
+    <li>Flask</li>
+    <li>Pandas</li>
+    <li>Scikit-learn</li>
+    <li>Matplotlib</li>
+    <li>Bootstrap</li>
+    <li>HTML and Jinja Templates</li>
   </ul>
 
-  <h2>Simple Example</h2>
+  <h2>Real-World Applications</h2>
   <p>
-    Suppose we analyze the relationship between study hours and grades. If the
-    regression line is
-    <em>Grade = 40 + 5 × Hours</em>, then a student who studies 6 hours is
-    expected to obtain a grade of 70.
+    Linear Regression can be used in many areas where a continuous value needs
+    to be predicted. Examples include education, economics, business,
+    engineering, and data analysis.
   </p>
 
   <section class="mt-5" aria-labelledby="linear-workflow">

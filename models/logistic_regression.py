@@ -1,76 +1,92 @@
 import pandas as pd
-from pathlib import Path
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
-
-def getData():
-    # Dataset German Credit (numeric)
-    data_path = Path(__file__).resolve().parent.parent / 'data' / 'german.data-numeric'
-    df = pd.read_csv(data_path, sep=r'\s+', header=None)
-
-    # Seleccionamos variables relevantes
-    X = df[[1, 4, 12]].copy()
-    X.columns = ['duration_months', 'credit_amount', 'age']
-
-    # Variable objetivo: 1 = default, 0 = no default
-    y = df.iloc[:, -1].apply(lambda x: 1 if x == 2 else 0)
-    return X, y
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 
 def implementLogisticRegression():
-    X, y = getData()
+    data = pd.read_csv("data/Student_Performance.csv")
 
-    # Dividir dataset
+    data["risk"] = (data["overall_score"] < 60).astype(int)
+
+    X = data[
+        [
+            "study_hours",
+            "attendance_percentage",
+            "age"
+        ]
+    ]
+
+    y = data["risk"]
+
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X,
+        y,
+        test_size=0.2,
+        random_state=42
     )
 
-    # Escalado
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    model = LogisticRegression(max_iter=1000)
 
-    # Entrenar modelo
-    model = LogisticRegression(random_state=42)
-    model.fit(X_train_scaled, y_train)
+    model.fit(X_train, y_train)
 
-    # Predicciones
-    y_pred = model.predict(X_test_scaled)
+    predictions = model.predict(X_test)
 
-    # Métricas
-    metrics = {
-        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
-        "accuracy": round(accuracy_score(y_test, y_pred), 4),
-        "precision": round(precision_score(y_test, y_pred), 4),
-        "recall": round(recall_score(y_test, y_pred), 4),
-        "f1": round(f1_score(y_test, y_pred), 4),
-        "coefficients": dict(zip(X.columns, model.coef_[0].tolist())),
-        "intercept": round(float(model.intercept_[0]), 4)
-    }
+    accuracy = accuracy_score(y_test, predictions)
+
+    precision = precision_score(y_test, predictions, zero_division=0)
+    recall = recall_score(y_test, predictions, zero_division=0)
+    f1 = f1_score(y_test, predictions, zero_division=0)
+    matrix = confusion_matrix(y_test, predictions).tolist()
+    coefs = model.coef_[0]
 
     return {
         "model": model,
-        "scaler": scaler,
-        "X_test": X_test,
-        "y_test": y_test,
-        "metrics": metrics
+        "metrics": {
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "confusion_matrix": matrix,
+            # Claves que la plantilla ya usa; credit_amount se alimenta con
+            # attendance_percentage porque el modelo no tiene esa variable.
+            "intercept": float(model.intercept_[0]),
+            "coefficients": {
+                "duration_months": float(coefs[0]),
+                "credit_amount": float(coefs[1]),
+                "age": float(coefs[2])
+            }
+        }
     }
 
-# Entrenamos una sola vez
-_model_assets = implementLogisticRegression()
 
-def PredictRisk(duration_months, credit_amount, age):
-    features = [[duration_months, credit_amount, age]]
-    scaled_features = _model_assets["scaler"].transform(features)
+logistic_assets = implementLogisticRegression()
 
-    prediction = int(_model_assets["model"].predict(scaled_features)[0])
-    probabilities = _model_assets["model"].predict_proba(scaled_features)[0]
-    default_probability = float(probabilities[1])
+
+def PredictRisk(duration, amount, age):
+    model = logistic_assets["model"]
+
+    study_hours = float(duration)
+    attendance = 80.0
+
+    input_data = [[
+        study_hours,
+        attendance,
+        age
+    ]]
+
+    prediction = model.predict(input_data)[0]
+
+    probability = model.predict_proba(input_data)[0][1]
 
     return {
-        "approved": prediction == 0,
-        "default_risk": "HIGH" if prediction == 1 else "LOW",
-        "default_probability": round(default_probability, 4),
-        "metrics": _model_assets["metrics"]
+        "default_risk": int(prediction),
+        "default_probability": float(probability),
+        "approved": bool(prediction == 0),
+        "metrics": logistic_assets["metrics"]
     }
