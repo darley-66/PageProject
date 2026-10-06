@@ -34,7 +34,8 @@ endblock %} {% block content %}
     text-align: justify;
   }
 
-  .concepts-container ul {
+  .concepts-container ul,
+  .concepts-container ol {
     text-align: left;
     margin-top: 15px;
     font-size: 17px;
@@ -47,110 +48,131 @@ endblock %} {% block content %}
 </style>
 
 <div class="concepts-container">
-  <h1>📊 Logistic Regression Concepts</h1>
+  <h1>📊 Logistic Regression</h1>
 
   <h2>Definition</h2>
   <p>
-    Logistic Regression is a supervised learning algorithm mainly used for
-    classification problems. Despite its name, it is not a regression model but
-    a classification model. It belongs to the family of Generalized Linear
-    Models (GLM), where the output is transformed using the logistic (sigmoid)
-    function to produce probabilities between 0 and 1.
+    Logistic Regression is a supervised machine learning algorithm used for
+    classification problems. Instead of predicting a continuous numerical
+    value, it estimates the probability that an observation belongs to a
+    particular class.
   </p>
 
-  <h2>History</h2>
+  <h2>Objective in This Application</h2>
   <p>
-    The logistic function was introduced in the 19th century by Pierre-François
-    Verhulst to model population growth. Later, Joseph Berkson (1940s) and David
-    Cox (1958) formalized Logistic Regression as a statistical technique. Since
-    then, it has become a key tool in medicine, social sciences, economics, and
-    machine learning.
+    In this application, Logistic Regression is used to classify student
+    performance into two categories: risk or no risk. The model determines
+    whether a student is considered at risk based on information from the
+    Student Performance dataset.
   </p>
 
-  <h2>Mathematical Foundations</h2>
+  <h2>Dataset</h2>
   <p>
-    The logistic function is defined as:
-    <br />
-    <em>P(Y=1|X) = 1 / (1 + e<sup>-(β₀ + β₁X₁ + ... + βₙXₙ)}</sup>)</em>
-  </p>
-  <p>
-    The log-odds (logit) is:
-    <br />
-    <em>logit(p) = ln(p / (1 - p))</em>
-  </p>
-  <p>
-    The model is trained using Maximum Likelihood Estimation (MLE), adjusting
-    coefficients to maximize the probability of observing the given data.
+    The application uses the
+    <strong>Student_Performance.csv</strong> dataset. A risk variable is
+    created from the student's overall score. Students with an overall score
+    below 60 are classified as being at risk.
   </p>
 
-  <h2>Types of Logistic Regression</h2>
+  <h2>Variables Used</h2>
   <ul>
     <li>
-      <strong>Binomial Logistic Regression:</strong> Two classes (e.g., spam vs.
-      not spam).
+      <strong>Study Hours:</strong> Number of hours used for studying.
     </li>
     <li>
-      <strong>Multinomial Logistic Regression:</strong> Multiple unordered
-      classes (e.g., cat, dog, sheep).
+      <strong>Attendance Percentage:</strong> Percentage of classes attended.
     </li>
     <li>
-      <strong>Ordinal Logistic Regression:</strong> Ordered classes (e.g., low,
-      medium, high).
+      <strong>Age:</strong> Student's age.
+    </li>
+    <li>
+      <strong>Risk:</strong> Target variable used for classification.
     </li>
   </ul>
 
-  <h2>Assumptions</h2>
-  <ul>
-    <li>Observations are independent.</li>
-    <li>The dependent variable is categorical.</li>
-    <li>Linear relationship between predictors and log-odds.</li>
-    <li>No strong multicollinearity among predictors.</li>
-    <li>Sufficient sample size for stability.</li>
-  </ul>
-
-  <h2>Model Training Steps</h2>
-  <ul>
-    <li>
-      Exploratory Data Analysis (EDA): review distributions and correlations.
-    </li>
-    <li>Verify assumptions.</li>
-    <li>Fit the model: estimate coefficients and odds ratios.</li>
-    <li>
-      Evaluate performance: confusion matrix, ROC-AUC, precision, recall,
-      F1-score.
-    </li>
-    <li>Apply regularization (L1/Lasso, L2/Ridge) to avoid overfitting.</li>
-  </ul>
-
-  <h2>Interpretation</h2>
+  <h2>How the Model Works</h2>
   <p>
-    Each coefficient β indicates the change in log-odds for a one-unit increase
-    in the variable. By exponentiating β, we obtain the odds ratio, which shows
-    how much the probability increases or decreases.
+    The model receives study hours, attendance percentage, and age as input
+    variables. Logistic Regression analyzes these values and calculates the
+    probability that the student belongs to the risk class.
   </p>
 
-  <h2>Modern Use Cases</h2>
-  <ul>
-    <li><strong>Medicine:</strong> Disease diagnosis.</li>
-    <li><strong>Finance:</strong> Credit scoring.</li>
-    <li><strong>Marketing:</strong> Customer churn prediction.</li>
-    <li><strong>Cybersecurity:</strong> Spam and fraud detection.</li>
-    <li><strong>Education:</strong> Academic performance prediction.</li>
-  </ul>
-
-  <h2>Example</h2>
+  <h2>Mathematical Foundation</h2>
   <p>
-    If a model predicts that a student has P(pass) = 0.85, it means there is an
-    85% probability of passing. With a threshold of 0.5, the student is
-    classified as "pass".
+    Logistic Regression uses the sigmoid function to convert the model output
+    into a probability between 0 and 1.
   </p>
 
-  <h2>Why It Matters</h2>
+  <p style="text-align: center;">
+    <strong>P(Y=1) = 1 / (1 + e<sup>-z</sup>)</strong>
+  </p>
+
   <p>
-    Logistic Regression is simple, efficient, and interpretable. It is often the
-    first choice for binary classification problems and serves as a baseline
-    model before moving to more complex algorithms like Support Vector Machines
-    or Neural Networks.
+    The value of <strong>z</strong> is calculated from the input variables and
+    their coefficients. A probability closer to 1 indicates a higher
+    probability of belonging to the risk class.
+  </p>
+
+  <h2>Classification</h2>
+  <p>
+    The application uses the model prediction to determine whether the student
+    is classified as being at risk. If the predicted class is 0, the application
+    considers the student approved or without risk. If the predicted class is
+    1, the student is considered to have default risk.
+  </p>
+
+  <h2>Training Process</h2>
+  <ol>
+    <li>The Student Performance dataset is loaded.</li>
+    <li>A risk variable is created using the overall score.</li>
+    <li>The input variables are selected.</li>
+    <li>The data is divided into training and testing sets.</li>
+    <li>The Logistic Regression model is trained.</li>
+    <li>The model predictions are evaluated using test data.</li>
+  </ol>
+
+  <h2>Model Evaluation</h2>
+  <p>
+    The application uses accuracy to evaluate the performance of the Logistic
+    Regression model.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Accuracy:</strong> Represents the percentage of correct
+      classifications made by the model.
+    </li>
+  </ul>
+
+  <h2>Prediction in the Application</h2>
+  <p>
+    The application allows the user to enter values through the Logistic
+    Regression form. The model then returns a classification and a probability
+    associated with the predicted risk.
+  </p>
+
+  <h2>Technologies Used</h2>
+  <ul>
+    <li>Python</li>
+    <li>Flask</li>
+    <li>Pandas</li>
+    <li>Scikit-learn</li>
+    <li>HTML and Jinja Templates</li>
+    <li>Bootstrap</li>
+  </ul>
+
+  <h2>Real-World Applications</h2>
+  <p>
+    Logistic Regression can be used for binary classification in areas such as
+    education, finance, medicine, marketing, and cybersecurity.
+  </p>
+
+  <h2>Importance</h2>
+  <p>
+    Logistic Regression is useful because it is relatively simple to train,
+    provides probability estimates, and is easy to interpret. It is commonly
+    used as a baseline classification algorithm before applying more complex
+    machine learning models.
   </p>
 </div>
 

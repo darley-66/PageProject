@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, abort, send_file
 from models.linear_regression import CalculateGrade, GeneratePlot
 from models.logistic_regression import PredictRisk, implementLogisticRegression
 from Kmeans import KMeans
-
 from models.svm_model import (
     get_breast_cancer_svm_metrics,
     plot_breast_cancer_dataset,
@@ -16,49 +15,41 @@ from models.kmeans_model import (
     get_assignments,
     run_kmeans,
 )
+from SGDRegression import train, GRID, START, GOAL, ACTION_NAMES
 import base64
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io, base64
-from SGDRegression import train, GRID, START, GOAL, ACTION_NAMES
-# Librerías para SVM y métricas
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, r2_score, mean_squared_error
+import io
+from sklearn.metrics import r2_score, mean_squared_error
 
 app = Flask(__name__)
-print("APP PRINCIPAL EJECUTANDOSE")
+
 BASE_DIR = Path(__file__).resolve().parent
 
-# ============================
-# Logistic Regression (assets)
-# ============================
 logistic_assets = implementLogisticRegression()
 
-# ============================
-# Home & Information
-# ============================
+
 @app.route("/")
 def home():
     return render_template("homePage.html")
+
 
 @app.route("/information/")
 def information():
     return render_template("index.html")
 
+
 @app.route("/concepts/")
 def concepts():
     return render_template("concepts.html")
 
-# ============================
-# Linear Regression
-# ============================
+
 @app.route("/conceptsLinear/")
 def concepts_linear():
     return render_template("conceptsLinear.html")
+
 
 @app.route("/LinearRegression/", methods=["GET", "POST"])
 def calculate():
@@ -66,47 +57,39 @@ def calculate():
     records = len(data_lin)
 
     calculateResult = None
-    plot_url = None
-    metrics = None
+    plot_url = GeneratePlot()
 
-    # Variables reales del dataset
     X = data_lin["study_hours"].values.reshape(-1, 1)
     y = data_lin["overall_score"].values
+
+    y_pred = CalculateGrade(data_lin["study_hours"].iloc[0])
+
+    metrics = {
+        "r2": r2_score(y, [y_pred] * len(y)),
+        "mse": mean_squared_error(y, [y_pred] * len(y))
+    }
 
     if request.method == "POST":
         try:
             hours = float(request.form.get("hours"))
             calculateResult = CalculateGrade(hours)
             plot_url = GeneratePlot(hours)
-
-            y_pred = [CalculateGrade(h) for h in data_lin["study_hours"]]
-            metrics = {
-                "r2": r2_score(y, y_pred),
-                "mse": mean_squared_error(y, y_pred)
-            }
         except (ValueError, TypeError):
             calculateResult = None
-            plot_url = GeneratePlot()
-    else:
-        plot_url = GeneratePlot()
-        y_pred = [CalculateGrade(h) for h in data_lin["study_hours"]]
-        metrics = {
-            "r2": r2_score(y, y_pred),
-            "mse": mean_squared_error(y, y_pred)
-        }
 
-    return render_template("temLinearRegression.html", 
-                           result=calculateResult, 
-                           records=records, 
-                           plot_url=plot_url,
-                           metrics=metrics)
+    return render_template(
+        "temLinearRegression.html",
+        result=calculateResult,
+        records=records,
+        plot_url=plot_url,
+        metrics=metrics
+    )
 
-# ============================
-# Logistic Regression
-# ============================
+
 @app.route("/logistic-concepts/")
 def concepts_logistic():
     return render_template("temLogisticConcepts.html")
+
 
 @app.route("/logistic-application/", methods=["GET", "POST"])
 def calculate_logistic():
@@ -127,16 +110,20 @@ def calculate_logistic():
         except (ValueError, TypeError):
             result = None
 
-    return render_template("temLogisticRegression.html",
-                           result=result,
-                           metrics=metrics,
-                           duration=duration,
-                           amount=amount,
-                           age=age)
+    return render_template(
+        "temLogisticRegression.html",
+        result=result,
+        metrics=metrics,
+        duration=duration,
+        amount=amount,
+        age=age
+    )
+
 
 @app.route("/api/predict-risk", methods=["POST"])
 def api_predict_risk():
     data_req = request.get_json()
+
     if not data_req:
         return jsonify({"error": "No data provided"}), 400
 
@@ -156,12 +143,11 @@ def api_predict_risk():
         "model_performance": result["metrics"]
     })
 
-# ============================
-# Support Vector Machine (SVM)
-# ============================
+
 @app.route("/svm-concepts/")
 def concepts_svm():
     return render_template("conceptsSVM.html")
+
 
 @app.route("/SVM/", methods=["GET", "POST"])
 def calculate_svm():
@@ -182,14 +168,14 @@ def calculate_svm():
         except:
             result = "Invalid input"
 
-    return render_template("temSVMApp.html", 
-                           result=result, 
-                           plot_url=plot_url,
-                           metrics=get_breast_cancer_svm_metrics())
+    return render_template(
+        "temSVMApp.html",
+        result=result,
+        plot_url=plot_url,
+        metrics=get_breast_cancer_svm_metrics()
+    )
 
-# ============================
-# K-Means
-# ============================
+
 @app.route("/kmeans-concepts/")
 def concepts_kmeans():
     return render_template("conceptsKMeans.html")
@@ -203,11 +189,14 @@ def kmeans_manual():
         run_kmeans()
 
     dataset = pd.read_csv(BASE_DIR / "data" / "ecommerce_customers.csv")
+
     images = {
         name: base64.b64encode(Path(path).read_bytes()).decode("ascii")
         for name, path in get_generated_images().items()
     }
+
     assignments_by_iteration = get_assignments()["iterations"]
+
     assignment_downloads = {
         iteration: "data:text/csv;base64," + base64.b64encode(
             assignments.to_csv(index=False).encode("utf-8")
@@ -216,6 +205,7 @@ def kmeans_manual():
     }
 
     centroids = get_centroids()
+
     return render_template(
         "temKMeans.html",
         dataset_name="ecommerce_customers.csv",
@@ -232,33 +222,36 @@ def kmeans_manual():
         assignment_downloads=assignment_downloads,
     )
 
-# ============================
-# Use Cases
-# ============================
+
 @app.route("/example/")
 def example():
     return render_template("use_case1.html")
+
 
 @app.route("/use-case-2/")
 def use_case_2():
     return render_template("use_case2.html")
 
+
 @app.route("/use-case-3/")
 def use_case3():
     return render_template("use_case3.html")
+
 
 @app.route("/use-case-4/")
 def use_case4():
     return render_template("use_case4.html")
 
-@app.route('/SGDRegression', methods=['GET', 'POST'])
+
+@app.route("/SGDRegression", methods=["GET", "POST"])
 def reinforcement():
     result = None
-    if request.method == 'POST':
+
+    if request.method == "POST":
         result = train(episodes=1000)
-# Pass the result and grid settings to the template.
+
     return render_template(
-        'SGDRegression.html',
+        "SGDRegression.html",
         result=result,
         grid=GRID,
         start=START,
@@ -266,13 +259,15 @@ def reinforcement():
         actions=ACTION_NAMES,
     )
 
+
 @app.route("/kmeans-app/")
 def kmeans_app():
     from Kmeans import implementClustering
+
     result_data = implementClustering()
-    
+
     return render_template(
-        "kmeans.html", 
+        "kmeans.html",
         results=result_data["results"],
         summary=result_data["summary"],
         centroids=result_data["centroids"],
@@ -286,7 +281,12 @@ def kmeans_app():
 def kmeans_plot_file(relative_path):
     if relative_path != "outputs/kmeans_clusters.png":
         abort(404)
-    return send_file(BASE_DIR / relative_path, mimetype="image/png")
+
+    return send_file(
+        BASE_DIR / relative_path,
+        mimetype="image/png"
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

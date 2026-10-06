@@ -1,46 +1,49 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import io, base64
-from pathlib import Path
+import io
+import base64
 from sklearn.linear_model import LinearRegression
 
-# Cargar dataset
-data_path = Path(__file__).resolve().parent.parent / "data" / "Student_Performance.csv"
-df = pd.read_csv(data_path)
+def train_model():
+    data = pd.read_csv("data/Student_Performance.csv")
+    X = data["study_hours"].values.reshape(-1, 1)
+    y = data["overall_score"].values
 
-# Asegurar tipos numéricos y limpiar
-df["study_hours"] = pd.to_numeric(df["study_hours"], errors="coerce")
-df["overall_score"] = pd.to_numeric(df["overall_score"], errors="coerce")
-df = df.dropna(subset=["study_hours", "overall_score"])
+    model = LinearRegression()
+    model.fit(X, y)
 
-# Variables
-X = df[["study_hours"]]
-y = df["overall_score"]
+    return model
 
-# Entrenar modelo
-model = LinearRegression()
-model.fit(X, y)
+model = train_model()
 
-def CalculateGrade(hours: float) -> float:
-    return float(model.predict([[hours]])[0])
+def CalculateGrade(hours):
+    prediction = model.predict([[hours]])[0]
+    return round(prediction, 2)
 
-def GeneratePlot(hours: float = None) -> str:
-    plt.figure(figsize=(6,4))
-    plt.scatter(X, y, color="blue", alpha=0.5, label="Datos reales")
-    plt.plot(X, model.predict(X), color="red", label="Regresión lineal")
+def GeneratePlot(hours=None):
+    data = pd.read_csv("data/Student_Performance.csv")
+
+    X = data["study_hours"].values.reshape(-1, 1)
+    y = data["overall_score"].values
+
+    y_pred = model.predict(X)
+
+    plt.figure(figsize=(7, 5))
+    plt.scatter(X, y, label="Datos reales")
+    plt.plot(X, y_pred, label="Regresión lineal")
 
     if hours is not None:
-        predicted = CalculateGrade(hours)
-        plt.scatter([hours], [predicted], color="green", s=100, marker="x", label="Predicción")
+        prediction = model.predict([[hours]])[0]
+        plt.scatter([hours], [prediction], s=100, label="Predicción")
 
     plt.xlabel("Study Hours")
     plt.ylabel("Overall Score")
-    plt.title("Linear Regression - Study Hours vs Overall Score")
+    plt.title("Linear Regression - Student Performance")
     plt.legend()
 
-    img = io.BytesIO()
-    plt.savefig(img, format="png")
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode("utf8")
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
     plt.close()
-    return f"data:image/png;base64,{plot_url}"
+    buf.seek(0)
+
+    return base64.b64encode(buf.getvalue()).decode("utf-8")

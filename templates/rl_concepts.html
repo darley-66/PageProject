@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}Reinforcement Learning - Concepts{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Reinforcement Learning</h1>
+        <p class="lead">
+            Concepts applied to the virtual robot navigation problem
+        </p>
+    </div>
+
+    <div class="alert alert-primary">
+        <strong>Context of the exercise:</strong>
+        In this application, a virtual agent learns how to move through
+        a 10 × 10 environment to reach a target while avoiding walls
+        and danger zones.
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>Agent</h4>
+                    <p>
+                        The agent is the virtual robot that interacts with
+                        the environment. Its objective is to learn how to
+                        reach the target.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>Environment</h4>
+                    <p>
+                        The environment is the 10 × 10 grid where the agent
+                        can move through normal cells, avoid walls and enter
+                        danger zones.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>State</h4>
+                    <p>
+                        A state represents the current position of the agent.
+                        It is represented by its row and column coordinates.
+                    </p>
+                    <code>(row, column)</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>Action</h4>
+                    <p>The agent has four possible actions:</p>
+
+                    <ul>
+                        <li>Up</li>
+                        <li>Down</li>
+                        <li>Left</li>
+                        <li>Right</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <h3>Reward and Penalty</h3>
+
+            <p>
+                The agent receives a numerical reward after every action.
+                Positive rewards encourage desirable behavior while
+                negative rewards discourage undesirable behavior.
+            </p>
+
+            <table class="table table-bordered text-center">
+
+                <thead>
+                    <tr>
+                        <th>Situation</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Normal movement</td>
+                        <td>Small negative reward</td>
+                    </tr>
+
+                    <tr>
+                        <td>Invalid movement</td>
+                        <td>Penalty</td>
+                    </tr>
+
+                    <tr>
+                        <td>Wall</td>
+                        <td>Strong penalty</td>
+                    </tr>
+
+                    <tr>
+                        <td>Danger Zone</td>
+                        <td>Danger penalty</td>
+                    </tr>
+
+                    <tr>
+                        <td>Target</td>
+                        <td>Positive reward</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <div class="accordion mt-4" id="rlAccordion">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" data-bs-toggle="collapse"
+                        data-bs-target="#policy">
+                    Policy
+                </button>
+            </h2>
+
+            <div id="policy" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    A policy defines which action the agent should take
+                    in a particular state. After training, the learned
+                    Q-values are used to select the best action.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#episode">
+                    Episode
+                </button>
+            </h2>
+
+            <div id="episode" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    An episode begins when the agent starts at A and ends
+                    when it reaches T or when the maximum number of steps
+                    is reached.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#exploration">
+                    Exploration and Exploitation
+                </button>
+            </h2>
+
+            <div id="exploration" class="accordion-collapse collapse">
+                <div class="accordion-body">
+
+                    <p>
+                        <strong>Exploration</strong> means trying different
+                        actions to discover the environment.
+                    </p>
+
+                    <p>
+                        <strong>Exploitation</strong> means choosing the
+                        action with the highest estimated Q-value.
+                    </p>
+
+                    <p>
+                        The application uses an
+                        <strong>Epsilon-Greedy</strong> strategy to balance
+                        both behaviors.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <h3>Q-Learning</h3>
+
+            <p>
+                Q-Learning is a reinforcement learning algorithm that
+                estimates the value of performing an action in a particular
+                state.
+            </p>
+
+            <p>
+                The learned value is represented as:
+            </p>
+
+            <div class="alert alert-secondary text-center">
+                Q(s,a)
+            </div>
+
+            <p>
+                The model uses these values to determine which action is
+                expected to produce the best future return.
+            </p>
+
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <h3>Important Parameters</h3>
+
+            <table class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Gamma (γ)</td>
+                        <td>
+                            Determines the importance of future rewards.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Epsilon (ε)</td>
+                        <td>
+                            Controls the amount of exploration.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Epsilon decay</td>
+                        <td>
+                            Gradually reduces exploration during training.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Learning rate</td>
+                        <td>
+                            Controls how strongly new information updates
+                            the model.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
