@@ -1,286 +1,278 @@
 {% extends "base.html" %}
 
-{% block title %}Reinforcement Learning - Concepts{% endblock %}
+{% block title %}Reinforcement Learning Concepts{% endblock %}
 
 {% block content %}
-
-<div class="container py-5">
-
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">Reinforcement Learning</h1>
-        <p class="lead">
-            Concepts applied to the virtual robot navigation problem
+<div class="container py-4">
+    <header class="text-center mb-4">
+        <p class="text-uppercase text-success fw-semibold mb-1">
+            <i class="bi bi-robot" aria-hidden="true"></i> Reinforcement Learning
         </p>
+        <h1 class="fw-bold">Learning to Navigate</h1>
+        <p class="lead text-secondary">
+            Concepts connected to the 10 × 10 grid and the SGDRegressor-based
+            Q-learning application.
+        </p>
+    </header>
+
+    <div class="alert alert-primary d-flex gap-3 align-items-start" role="alert">
+        <i class="bi bi-info-circle-fill fs-4" aria-hidden="true"></i>
+        <div>
+            <strong>In this exercise:</strong> a robot starts at A, observes its
+            grid position, chooses Up, Down, Left, or Right, and learns from
+            rewards while navigating walls and danger zones toward T.
+        </div>
     </div>
 
-    <div class="alert alert-primary">
-        <strong>Context of the exercise:</strong>
-        In this application, a virtual agent learns how to move through
-        a 10 × 10 environment to reach a target while avoiding walls
-        and danger zones.
-    </div>
-
-    <div class="row g-4">
-
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h4>Agent</h4>
-                    <p>
-                        The agent is the virtual robot that interacts with
-                        the environment. Its objective is to learn how to
-                        reach the target.
-                    </p>
+    <section class="mb-4" aria-labelledby="interaction-heading">
+        <h2 id="interaction-heading" class="h4 mb-3">The interaction loop</h2>
+        <div class="row g-3 text-center">
+            <div class="col-12 col-md-3">
+                <div class="card h-100 border-success">
+                    <div class="card-body">
+                        <i class="bi bi-robot fs-2 text-success" aria-hidden="true"></i>
+                        <h3 class="h6 mt-2">Agent</h3>
+                        <p class="mb-0">Robot at state <code>(row, column)</code></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-signpost-split fs-2 text-primary" aria-hidden="true"></i>
+                        <h3 class="h6 mt-2">Action</h3>
+                        <p class="mb-0">Up · Down · Left · Right</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-grid-3x3-gap fs-2 text-warning" aria-hidden="true"></i>
+                        <h3 class="h6 mt-2">Environment</h3>
+                        <p class="mb-0">10 × 10 grid with A, T, #, D, and o</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-award fs-2 text-danger" aria-hidden="true"></i>
+                        <h3 class="h6 mt-2">Feedback</h3>
+                        <p class="mb-0">Reward or penalty updates action values</p>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h4>Environment</h4>
-                    <p>
-                        The environment is the 10 × 10 grid where the agent
-                        can move through normal cells, avoid walls and enter
-                        danger zones.
-                    </p>
-                </div>
-            </div>
+        <div class="text-center my-2" aria-hidden="true">
+            <i class="bi bi-arrow-down fs-3 text-secondary"></i>
         </div>
-
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h4>State</h4>
-                    <p>
-                        A state represents the current position of the agent.
-                        It is represented by its row and column coordinates.
-                    </p>
-                    <code>(row, column)</code>
-                </div>
-            </div>
+        <div class="alert alert-success text-center mb-0">
+            <i class="bi bi-bullseye me-2" aria-hidden="true"></i>
+            Repeat the loop until the robot reaches T or the episode reaches its
+            step limit.
         </div>
+    </section>
 
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h4>Action</h4>
-                    <p>The agent has four possible actions:</p>
-
-                    <ul>
-                        <li>Up</li>
-                        <li>Down</li>
-                        <li>Left</li>
-                        <li>Right</li>
-                    </ul>
-                </div>
-            </div>
+    <section class="card shadow-sm mb-4" aria-labelledby="core-concepts-heading">
+        <div class="card-header bg-dark text-white">
+            <h2 id="core-concepts-heading" class="h5 mb-0">
+                <i class="bi bi-book me-2" aria-hidden="true"></i>Core concepts in this grid
+            </h2>
         </div>
-
-    </div>
-
-    <div class="card shadow-sm mt-4">
         <div class="card-body">
-
-            <h3>Reward and Penalty</h3>
-
-            <p>
-                The agent receives a numerical reward after every action.
-                Positive rewards encourage desirable behavior while
-                negative rewards discourage undesirable behavior.
-            </p>
-
-            <table class="table table-bordered text-center">
-
-                <thead>
-                    <tr>
-                        <th>Situation</th>
-                        <th>Meaning</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>Normal movement</td>
-                        <td>Small negative reward</td>
-                    </tr>
-
-                    <tr>
-                        <td>Invalid movement</td>
-                        <td>Penalty</td>
-                    </tr>
-
-                    <tr>
-                        <td>Wall</td>
-                        <td>Strong penalty</td>
-                    </tr>
-
-                    <tr>
-                        <td>Danger Zone</td>
-                        <td>Danger penalty</td>
-                    </tr>
-
-                    <tr>
-                        <td>Target</td>
-                        <td>Positive reward</td>
-                    </tr>
-                </tbody>
-
-            </table>
-
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-robot me-2 text-success" aria-hidden="true"></i>What is Reinforcement Learning?</h3>
+                            <p class="mb-0">A learning approach where an agent interacts with an environment, receives feedback, and improves its decisions. Here the agent learns a route through the grid from rewards and penalties.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-person-gear me-2 text-success" aria-hidden="true"></i>Agent</h3>
+                            <p class="mb-0">The decision-maker: the virtual robot that selects grid movements.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-grid-3x3 me-2 text-primary" aria-hidden="true"></i>Environment</h3>
+                            <p class="mb-0">The 10 × 10 grid. A marks the start, T the goal, # walls, D danger zones, and o ordinary cells.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-geo-alt me-2 text-primary" aria-hidden="true"></i>State</h3>
+                            <p class="mb-0">The robot's current location, represented by <code>(row, column)</code>.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-arrow-left-right me-2 text-primary" aria-hidden="true"></i>Action</h3>
+                            <p class="mb-0">One of Up, Down, Left, or Right. The transition function keeps the robot in place when a move hits a wall or leaves the grid.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-stars me-2 text-warning" aria-hidden="true"></i>Reward and Penalty</h3>
+                            <p class="mb-0">Feedback after a move: ordinary movement costs −1, invalid or wall movement −5, a danger zone −10, and reaching T gives +20.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-signpost me-2 text-success" aria-hidden="true"></i>Policy</h3>
+                            <p class="mb-0">The rule for choosing an action in a state. At evaluation time the application chooses the action with the greatest predicted Q-value.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-arrow-repeat me-2 text-info" aria-hidden="true"></i>Step</h3>
+                            <p class="mb-0">One state-action transition: choose a direction, observe the next state and reward, then update the learned Q estimate.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-flag me-2 text-info" aria-hidden="true"></i>Episode</h3>
+                            <p class="mb-0">One training attempt starting at A. It ends at T or after the 100-step limit.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-journal-check me-2 text-info" aria-hidden="true"></i>Experience</h3>
+                            <p class="mb-0">The observed tuple <code>(state, action, reward, next_state)</code>. The training loop uses each transition immediately to update its action-value model.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-compass me-2 text-primary" aria-hidden="true"></i>Exploration</h3>
+                            <p class="mb-0">Trying a random direction to discover outcomes, including alternatives to the currently best-known move.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-bullseye me-2 text-success" aria-hidden="true"></i>Exploitation</h3>
+                            <p class="mb-0">Choosing the direction with the highest predicted Q-value based on what training has learned so far.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-shuffle me-2 text-warning" aria-hidden="true"></i>Epsilon-Greedy</h3>
+                            <p class="mb-0">With probability ε the agent explores randomly; otherwise it exploits the highest-valued action. In this implementation ε decays after each episode.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-lightning-charge me-2 text-warning" aria-hidden="true"></i>Immediate Reward</h3>
+                            <p class="mb-0">The reward from the current transition, before considering future rewards. For example, entering a danger cell gives −10 immediately.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-graph-up-arrow me-2 text-primary" aria-hidden="true"></i>Return</h3>
+                            <p class="mb-0">The accumulated rewards over a trajectory. The evaluation reports the sum of rewards from its greedy sequence of moves.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-hourglass-split me-2 text-secondary" aria-hidden="true"></i>Discount Factor (γ)</h3>
+                            <p class="mb-0">Controls the weight of future estimates in the update target. The current training code uses γ = 0.95.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-pin-map me-2 text-primary" aria-hidden="true"></i>State Value V(s)</h3>
+                            <p class="mb-0">The expected long-term value of being in a state under a policy. In Q-learning it can be derived from action values as <code>V(s) = maxₐ Q(s,a)</code>.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-bar-chart-line me-2 text-primary" aria-hidden="true"></i>Action Value Q(s,a)</h3>
+                            <p class="mb-0">The estimated long-term return for taking action <em>a</em> in state <em>s</em>. The application predicts one value for each of the four directions using SGDRegressor.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h6"><i class="bi bi-mortarboard me-2 text-success" aria-hidden="true"></i>Q-Learning</h3>
+                            <p class="mb-0">An off-policy method that updates an action value toward the immediate reward plus the discounted best next-state action value. This project approximates Q-values with SGDRegressor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="accordion mt-4" id="rlAccordion">
-
+    <section class="accordion mb-4" id="rlDetails">
         <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" data-bs-toggle="collapse"
-                        data-bs-target="#policy">
-                    Policy
+            <h2 class="accordion-header" id="update-heading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#update-panel" aria-expanded="true" aria-controls="update-panel">
+                    <i class="bi bi-calculator me-2" aria-hidden="true"></i>How the current Q update works
                 </button>
             </h2>
-
-            <div id="policy" class="accordion-collapse collapse show">
+            <div id="update-panel" class="accordion-collapse collapse show" aria-labelledby="update-heading" data-bs-parent="#rlDetails">
                 <div class="accordion-body">
-                    A policy defines which action the agent should take
-                    in a particular state. After training, the learned
-                    Q-values are used to select the best action.
+                    <p>The training target is the immediate reward plus the discounted best predicted next action value, except when the goal terminates the transition.</p>
+                    <div class="alert alert-secondary text-center mb-0" role="note">
+                        <code>target = reward + γ × maxₐ Q(next_state, a)</code>
+                        <span class="d-block small mt-1">For a terminal goal transition, target = reward.</span>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#episode">
-                    Episode
+            <h2 class="accordion-header" id="policy-heading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy-panel" aria-expanded="false" aria-controls="policy-panel">
+                    <i class="bi bi-signpost-2 me-2" aria-hidden="true"></i>Training policy and evaluation
                 </button>
             </h2>
-
-            <div id="episode" class="accordion-collapse collapse">
+            <div id="policy-panel" class="accordion-collapse collapse" aria-labelledby="policy-heading" data-bs-parent="#rlDetails">
                 <div class="accordion-body">
-                    An episode begins when the agent starts at A and ends
-                    when it reaches T or when the maximum number of steps
-                    is reached.
+                    Training uses epsilon-greedy action selection and reduces ε after each episode. Evaluation uses the greedy action (maximum predicted Q-value) and records state, action, next state, reward, and destination cell type.
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#exploration">
-                    Exploration and Exploitation
-                </button>
-            </h2>
-
-            <div id="exploration" class="accordion-collapse collapse">
-                <div class="accordion-body">
-
-                    <p>
-                        <strong>Exploration</strong> means trying different
-                        actions to discover the environment.
-                    </p>
-
-                    <p>
-                        <strong>Exploitation</strong> means choosing the
-                        action with the highest estimated Q-value.
-                    </p>
-
-                    <p>
-                        The application uses an
-                        <strong>Epsilon-Greedy</strong> strategy to balance
-                        both behaviors.
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
+    <div class="alert alert-success" role="status">
+        <i class="bi bi-play-circle me-2" aria-hidden="true"></i>
+        Explore the live grid and trained action values on the
+        <a href="{{ url_for('reinforcement') }}" class="alert-link">Reinforcement Learning Application</a>.
     </div>
-
-    <div class="card shadow-sm mt-4">
-        <div class="card-body">
-
-            <h3>Q-Learning</h3>
-
-            <p>
-                Q-Learning is a reinforcement learning algorithm that
-                estimates the value of performing an action in a particular
-                state.
-            </p>
-
-            <p>
-                The learned value is represented as:
-            </p>
-
-            <div class="alert alert-secondary text-center">
-                Q(s,a)
-            </div>
-
-            <p>
-                The model uses these values to determine which action is
-                expected to produce the best future return.
-            </p>
-
-        </div>
-    </div>
-
-    <div class="card shadow-sm mt-4">
-        <div class="card-body">
-
-            <h3>Important Parameters</h3>
-
-            <table class="table table-striped">
-
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Purpose</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr>
-                        <td>Gamma (γ)</td>
-                        <td>
-                            Determines the importance of future rewards.
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Epsilon (ε)</td>
-                        <td>
-                            Controls the amount of exploration.
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Epsilon decay</td>
-                        <td>
-                            Gradually reduces exploration during training.
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Learning rate</td>
-                        <td>
-                            Controls how strongly new information updates
-                            the model.
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-    </div>
-
 </div>
-
 {% endblock %}

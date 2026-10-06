@@ -195,10 +195,28 @@
               </ul>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('reinforcement') }}">
-                Reinforcement Learning (SGD)
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Reinforcement Learning
               </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('rl_concepts') }}">
+                    Concepts
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('reinforcement') }}">
+                    Application
+                  </a>
+                </li>
+              </ul>
             </li>
 
             <!-- USE CASES -->

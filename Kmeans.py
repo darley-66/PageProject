@@ -1,4 +1,5 @@
 from pathlib import Path
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -60,6 +61,7 @@ def getData():
     data = customers[["CustomerID", *feature_cols]].to_dict(orient="records")
     return data, customers, feature_cols
 
+@lru_cache(maxsize=1)
 def implementClustering():
     data, df, feature_cols = getData()
 

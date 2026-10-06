@@ -46,6 +46,11 @@ def concepts():
     return render_template("concepts.html")
 
 
+@app.route("/rl-concepts/")
+def rl_concepts():
+    return render_template("rl_concepts.html")
+
+
 @app.route("/conceptsLinear/")
 def concepts_linear():
     return render_template("conceptsLinear.html")
@@ -265,10 +270,12 @@ def kmeans_app():
     from Kmeans import implementClustering
 
     result_data = implementClustering()
+    customer_count = len(result_data["results"])
 
     return render_template(
         "kmeans.html",
-        results=result_data["results"],
+        results=result_data["results"][:50],
+        customer_count=customer_count,
         summary=result_data["summary"],
         centroids=result_data["centroids"],
         score=result_data.get("silhouette_score"),

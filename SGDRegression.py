@@ -60,6 +60,21 @@ def predict_q_values(model, state):
     ])
     return model.predict(features)
 
+
+def get_cell_type(state, action):
+    row = state[0] + ACTIONS[action][0]
+    column = state[1] + ACTIONS[action][1]
+    if not (0 <= row < ROWS and 0 <= column < COLUMNS):
+        return "Wall"
+    if GRID[row][column] == 1:
+        return "Wall"
+    if (row, column) == GOAL:
+        return "Goal"
+    if GRID[row][column] == 2:
+        return "Danger Zone"
+    return "Path"
+
+
 def train(episodes=1000):
     if episodes < 1:
         raise ValueError("episodes must be at least 1")
@@ -129,6 +144,7 @@ def train(episodes=1000):
         "number": number, "state": state,
         "action": ACTION_NAMES[action],
         "next_state": next_state, "reward": reward,
+        "cell_type": get_cell_type(state, action),
     })
 
         path.append(next_state)
@@ -136,6 +152,7 @@ def train(episodes=1000):
         if terminated:
             break
     reached_goal = state == GOAL
+    final_evaluation_reward = sum(step_info["reward"] for step_info in steps)
 
     # Build a display table from model predictions.
     q_table = []
@@ -151,15 +168,18 @@ def train(episodes=1000):
     return {
         "episodes": episodes,
         "successes": successes,
+        "success_percentage": round(successes / episodes * 100, 2),
         "final_average": round(
             sum(rewards[-100:]) / len(rewards[-100:]), 2
         ),
+        "final_epsilon": epsilon,
         "reached_goal": reached_goal,
+        "final_evaluation_reward": final_evaluation_reward,
+        "number_of_movements": len(steps),
         "path": path,
         "steps": steps,
         "q_table": q_table,
     }
-
 
 
 
